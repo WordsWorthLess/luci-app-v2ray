@@ -38,8 +38,8 @@ return L.Class.extend({
 
   getCore: function (): string {
     return uci.load("v2ray").then(function () {
-      let core: string = uci.get("v2ray", "main", "core");
-      return !core ? V2ray : core;
+      const core = uci.get("v2ray", "main", "core");
+      return !core ? "V2ray" : core;
     });
   },
 
