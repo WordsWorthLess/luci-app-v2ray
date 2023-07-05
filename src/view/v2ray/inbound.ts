@@ -14,20 +14,24 @@
 // "require view";
 
 // @ts-ignore
-return L.view.extend<string[]>({
+return L.view.extend<string[], string>({
   load: function () {
-    return v2ray.getLocalIPs();
+    return Promise.all([v2ray.getLocalIPs(), v2ray.getCore()]);
   },
-  render: function (localIPs = []) {
-    const m = new form.Map("v2ray", "%s - %s".format(_("V2Ray"), _("Inbound")));
+
+  render: function ([localIPs = [], core = ""] = []) {
+    const m = new form.Map("v2ray", "%s - %s".format(core, _("Inbound")));
 
     const s = m.section(form.GridSection, "inbound");
-    s.anonymous = true;
     s.addremove = true;
     s.sortable = true;
+    s.sectiontitle = function (section_name: string) {
+      const section_title = uci.get("v2ray", section_name, "alias");
+      return section_title;
+    };
     s.modaltitle = function (section_id: string) {
       const alias = uci.get("v2ray", section_id, "alias");
-      return `${_("Inbound")} » ${alias ?? _("Add")}`;
+      return `${_("Inbound")} > ${alias ?? _("Add")}`;
     };
     s.nodescriptions = true;
 
@@ -39,6 +43,7 @@ return L.view.extend<string[]>({
 
     /** General settings */
     o = s.taboption("general", form.Value, "alias", _("Alias"));
+    o.modalonly = true;
     o.rmempty = false;
 
     o = s.taboption("general", form.Value, "listen", _("Listen"));
@@ -331,9 +336,7 @@ return L.view.extend<string[]>({
       form.Value,
       "s_socks_ip",
       "%s - %s".format("Socks", _("IP")),
-      _(
-        "When UDP is enabled, V2Ray needs to know the IP address of current host."
-      )
+      _("IP address of current host")
     );
     o.modalonly = true;
     o.depends("s_socks_udp", "1");
@@ -737,14 +740,15 @@ return L.view.extend<string[]>({
 
     o = s.taboption(
       "stream",
-      form.DynamicList,
+      form.ListValue,
       "ss_websocket_headers",
-      "%s - %s".format("WebSocket", _("Headers")),
-      _(
-        "A list of HTTP headers, format: <code>header=value</code>. eg: %s"
-      ).format("Host=www.bing.com")
+      "%s - %s".format("WebSocket", _("Host"))
     );
     o.modalonly = true;
+    o.datatype = "hostname";
+    o.validate = function (sid: string, Value: string): boolean | string {
+      return v2ray.v2rayValidation("sni", Value, sid);
+    };
     o.depends("ss_network", "ws");
 
     // Stream Settings - HTTP/2
@@ -846,6 +850,7 @@ return L.view.extend<string[]>({
 
     /** Other Settings **/
     o = s.taboption("other", form.Value, "tag", _("Tag"));
+    o.rmempty = false;
 
     o = s.taboption(
       "other",
@@ -862,8 +867,33 @@ return L.view.extend<string[]>({
       "%s - %s".format(_("Sniffing"), _("Dest override"))
     );
     o.modalonly = true;
+    o.value("fakedns");
     o.value("http");
     o.value("tls");
+    o.value("quic");
+    o.value("fakedns+others");
+
+    o = s.taboption(
+      "other",
+      form.ListValue,
+      "metadata_only",
+      _("Metadata Only")
+    );
+    o.modalonly = true;
+    o.value("0", _("False"));
+    o.value("1", _("True"));
+
+    o = s.taboption(
+      "other",
+      form.DynamicList,
+      "domains_excluded",
+      _("Domains Excluded")
+    );
+    o.modalonly = true;
+    o.datatype = "hostname";
+
+    o = s.taboption("other", form.Flag, "route_only", _("Route Only"));
+    o.modalonly = true;
 
     o = s.taboption(
       "other",

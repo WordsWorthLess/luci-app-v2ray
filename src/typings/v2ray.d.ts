@@ -9,6 +9,11 @@ type SectionItem = {
   value: string;
 };
 
+type xtlsItem = {
+  security: string;
+  flow: string;
+};
+
 type CustomTextValueProperties = {
   filepath: string | null;
   isjson: boolean;
@@ -38,6 +43,7 @@ interface V2Ray extends LuCI.baseclass {
   getLocalIPs(): Promise<string[]>;
   getSections(type: string): Promise<SectionItem[]>;
   getDokodemoDoorPorts(): Promise<SectionItem[]>;
+  getXtlsSecurity(): Promise<xtlsItem[]>;
 }
 
 interface Base64 extends LuCI.baseclass {

@@ -13,8 +13,8 @@ PKG_LICENSE:=#{license}
 PKG_MAINTAINER:=#{author}
 
 LUCI_TITLE:=#{description}
-LUCI_DEPENDS:=+jshn +ip +ipset +iptables +iptables-mod-tproxy +resolveip \
-	+dnsmasq-full
+LUCI_DEPENDS:=+jshn +ip +nftables-json +kmod-nft-socket +kmod-nft-tproxy \
+	+resolveip +dnsmasq-full +curl +coreutils-base64
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/conffiles
@@ -38,6 +38,7 @@ if [ -z "$${IPKG_INSTROOT}" ] ; then
 fi
 
 chmod 755 "$${IPKG_INSTROOT}/etc/init.d/v2ray" >/dev/null 2>&1
+chmod 755 "$${IPKG_INSTROOT}/usr/share/v2ray/update_lists.sh" >/dev/null 2>&1
 ln -sf "../init.d/v2ray" \
 	"$${IPKG_INSTROOT}/etc/rc.d/S99v2ray" >/dev/null 2>&1
 

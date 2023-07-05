@@ -37,7 +37,7 @@ const apnicDelegatedUrls = {
 };
 
 // @ts-ignore
-return L.view.extend<[SectionItem[], SectionItem[]]>({
+return L.view.extend<[SectionItem[], SectionItem[], string]>({
   handleListUpdate(ev: MouseEvent, section_id: string, listtype: string) {
     const hideModal = function () {
       ui.hideModal();
@@ -51,114 +51,71 @@ return L.view.extend<[SectionItem[], SectionItem[]]>({
           uci.get<string>("v2ray", section_id, "gfwlist_mirror") || "github";
         const url = gfwlistUrls[gfwlistMirror];
 
-        return L.Request.request(L.url("admin/services/v2ray/request"), {
-          method: "post",
-          timeout: 50 * 1000,
-          query: {
-            url: url,
-            token: L.env.token,
-            sessionid: L.env.sessionid,
-          },
-        })
-          .then(function (res: LuCI.response) {
-            let data;
-            if (res.status === 200 && (data = res.json())) {
-              let content;
-              if (!data.code && (content = data.content)) {
-                const gfwlistDomains = converters.extractGFWList(content);
-                if (gfwlistDomains) {
-                  fs.write("/etc/v2ray/gfwlist.txt", gfwlistDomains)
-                    .then(function () {
-                      ui.showModal(_("List Update"), [
-                        E("p", _("GFWList updated.")),
-                        E(
-                          "div",
-                          { class: "right" },
-                          E(
-                            "button",
-                            {
-                              class: "btn",
-                              click: hideModal,
-                            },
-                            _("OK")
-                          )
-                        ),
-                      ]);
-                    })
-                    .catch(L.raise);
-                } else {
-                  L.raise("Error", _("Failed to decode GFWList."));
-                }
+        return fs
+          .exec("/usr/share/v2ray/update_lists.sh", [listtype, url])
+          .then(
+            L.bind(function (res) {
+              if (res.code === 0) {
+                ui.showModal(_("List Update"), [
+                  E("p", _("GFWList updated.")),
+                  E(
+                    "div",
+                    { class: "right" },
+                    E("button", { class: "btn", click: hideModal }, _("OK"))
+                  ),
+                ]);
               } else {
-                L.raise("Error", data.message || _("Failed to fetch GFWList."));
+                ui.showModal(_("Update Failed"), [
+                  E("p", "Updated failed with error code:%d".format(res.code)),
+                  E("pre", {}, res.stderr ? res.stderr : ""),
+                  E(
+                    "div",
+                    { class: "right" },
+                    E("button", { class: "btn", click: ui.hideModal }, _("OK"))
+                  ),
+                ]);
               }
-            } else {
-              L.raise("Error", res.statusText);
-            }
-          })
-          .catch(function (e) {
-            ui.addNotification(null, E("p", e.message));
-          });
+            }),
+            this,
+            ev.target
+          )
+          .catch(function () {});
       }
       case "chnroute":
       case "chnroute6": {
         const delegatedMirror =
           uci.get<string>("v2ray", section_id, "apnic_delegated_mirror") ||
           "apnic";
-
         const url = apnicDelegatedUrls[delegatedMirror];
-
-        return L.Request.request(L.url("admin/services/v2ray/request"), {
-          method: "post",
-          timeout: 50 * 1000,
-          query: {
-            url: url,
-            token: L.env.token,
-            sessionid: L.env.sessionid,
-          },
-        })
-          .then(function (res: LuCI.response) {
-            let data;
-            if (res.status === 200 && (data = res.json())) {
-              let content;
-              if ((content = data.content)) {
-                const ipList = converters.extractCHNRoute(
-                  content,
-                  listtype === "chnroute6"
-                );
-
-                fs.write(`/etc/v2ray/${listtype}.txt`, ipList)
-                  .then(function () {
-                    ui.showModal(_("List Update"), [
-                      E("p", _("CHNRoute list updated.")),
-                      E(
-                        "div",
-                        { class: "right" },
-                        E(
-                          "button",
-                          {
-                            class: "btn",
-                            click: hideModal,
-                          },
-                          _("OK")
-                        )
-                      ),
-                    ]);
-                  })
-                  .catch(L.raise);
+        return fs
+          .exec("/usr/share/v2ray/update_lists.sh", [listtype, url])
+          .then(
+            L.bind(function (res) {
+              if (res.code === 0) {
+                ui.showModal(_("List Update"), [
+                  E("p", _("China Route Lists updated.")),
+                  E(
+                    "div",
+                    { class: "right" },
+                    E("button", { class: "btn", click: hideModal }, _("OK"))
+                  ),
+                ]);
               } else {
-                L.raise(
-                  "Error",
-                  data.message || _("Failed to fetch CHNRoute list.")
-                );
+                ui.showModal(_("Update Failed"), [
+                  E("p", "Updated failed with error code:%d".format(res.code)),
+                  E("pre", {}, res.stderr ? res.stderr : ""),
+                  E(
+                    "div",
+                    { class: "right" },
+                    E("button", { class: "btn", click: ui.hideModal }, _("OK"))
+                  ),
+                ]);
               }
-            } else {
-              L.raise("Error", res.statusText);
-            }
-          })
-          .catch(function (e) {
-            ui.addNotification(null, E("p", e.message));
-          });
+            }),
+            this,
+            ev.target
+          )
+          .catch(function () {});
       }
 
       default: {
@@ -167,12 +124,12 @@ return L.view.extend<[SectionItem[], SectionItem[]]>({
     }
   },
   load: function () {
-    return v2ray.getDokodemoDoorPorts();
+    return Promise.all([v2ray.getDokodemoDoorPorts(), v2ray.getCore()]);
   },
-  render: function (dokodemoDoorPorts = []) {
+  render: function ([dokodemoDoorPorts = [], core = ""] = []) {
     const m = new form.Map(
       "v2ray",
-      "%s - %s".format(_("V2Ray"), _("Transparent Proxy"))
+      "%s - %s".format(core, _("Transparent Proxy"))
     );
 
     const s = m.section(
@@ -215,6 +172,7 @@ return L.view.extend<[SectionItem[], SectionItem[]]>({
       _("Setup redirect rules with TProxy.")
     );
 
+    o = s.option(form.Flag, "ipv6_tproxy", _("Proxy IPv6"));
     o = s.option(
       form.Flag,
       "only_privileged_ports",
@@ -226,24 +184,48 @@ return L.view.extend<[SectionItem[], SectionItem[]]>({
       form.Flag,
       "redirect_udp",
       _("Redirect UDP"),
-      _("Redirect UDP traffic to V2Ray.")
+      "%s %s.".format(_("Redirect UDP traffic to"), core)
     );
 
     o = s.option(
       form.Flag,
       "redirect_dns",
       _("Redirect DNS"),
-      _("Redirect DNS traffic to V2Ray.")
+      "%s %s.".format(_("Redirect DNS queries to"), core)
     );
     o.depends("redirect_udp", "");
     o.depends("redirect_udp", "0");
 
     o = s.option(
+      form.DynamicList,
+      "excluded_tcp_port",
+      _("Excluded TCP Source Port(s)"),
+      _(
+        "Outgoing TCP Traffic from the given port(s) will be ignored by Transparent Proxy."
+      )
+    );
+    o.datatype = "portrange";
+    o.rmempty = true;
+
+    o = s.option(
+      form.DynamicList,
+      "excluded_udp_port",
+      _("Excluded UDP Source Port(s)"),
+      _(
+        "Outgoing UDP Traffic from the given port(s) will be ignored by Transparent Proxy."
+      )
+    );
+    o.depends("redirect_udp", "1");
+    o.datatype = "portrange";
+    o.rmempty = true;
+
+    o = s.option(
       form.ListValue,
       "proxy_mode",
       _("Proxy mode"),
-      _(
-        "If enabled, iptables rules will be added to pre-filter traffic and then sent to V2Ray."
+      "%s %s.".format(
+        _("Apply firewall rules to Pre-filter traffic before sending to"),
+        core
       )
     );
     o.value("default", _("Default"));

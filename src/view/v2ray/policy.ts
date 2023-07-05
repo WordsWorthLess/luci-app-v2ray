@@ -13,14 +13,17 @@
 // "require view";
 
 // @ts-ignore
-return L.view.extend<SectionItem[]>({
+return L.view.extend<SectionItem[], string>({
   load: function () {
-    return v2ray.getSections("policy_level", "level");
+    return Promise.all([
+      v2ray.getSections("policy_level", "level"),
+      v2ray.getCore(),
+    ]);
   },
-  render: function (policyLevels = []) {
+  render: function ([policyLevels = [], core = ""] = []) {
     const m = new form.Map(
       "v2ray",
-      "%s - %s".format(_("V2Ray"), _("Policy")),
+      "%s - %s".format(core, _("Policy")),
       _("Details: %s").format(
         '<a href="https://www.v2ray.com/en/configuration/policy.html#policyobject" target="_blank">PolicyObject</a>'
       )

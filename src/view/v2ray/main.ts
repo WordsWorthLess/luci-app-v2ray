@@ -10,13 +10,14 @@
 "require form";
 "require fs";
 "require ui";
+"require uci";
 "require v2ray";
 // "require view";
 
 "require view/v2ray/include/custom as custom";
 
 // @ts-ignore
-return L.view.extend<SectionItem[][]>({
+return L.view.extend<SectionItem[][], string>({
   handleServiceReload: function (ev: MouseEvent) {
     return fs
       .exec("/etc/init.d/v2ray", ["reload"])
@@ -46,12 +47,18 @@ return L.view.extend<SectionItem[][]>({
     return Promise.all([
       v2ray.getSections("inbound"),
       v2ray.getSections("outbound"),
+      v2ray.getCore(),
     ]);
   },
-  render: function ([inboundSections = [], outBoundSections = []] = []) {
+
+  render: function ([
+    inboundSections = [],
+    outBoundSections = [],
+    core = "",
+  ] = []) {
     const m = new form.Map(
       "v2ray",
-      "%s - %s".format(_("V2ray"), _("Global Settings")),
+      "%s - %s".format(core, _("Global Settings")),
       "<p>%s</p><p>%s</p>".format(
         _("A platform for building proxies to bypass network restrictions."),
         _("For more information, please visit: %s").format(
@@ -84,19 +91,19 @@ return L.view.extend<SectionItem[][]>({
     o = s.option(
       form.Value,
       "v2ray_file",
-      _("V2Ray file"),
-      _("Set the V2Ray executable file path.")
+      _("Core file"),
+      _("Location of the core binary.")
     );
     o.datatype = "file";
-    o.placeholder = "/usr/bin/v2ray";
+    o.placeholder = "/usr/bin/xray";
     o.rmempty = false;
 
     o = s.option(
       form.Value,
       "asset_location",
-      _("V2Ray asset location"),
+      _("Assets location"),
       _(
-        "Directory where geoip.dat and geosite.dat files are, default: same directory as V2Ray file."
+        "Directory where geoip.dat and geosite.dat files are, default: same directory as core binary."
       )
     );
     o.datatype = "directory";
@@ -106,7 +113,7 @@ return L.view.extend<SectionItem[][]>({
       form.Value,
       "mem_percentage",
       _("Memory percentage"),
-      _("The maximum percentage of memory used by V2Ray.")
+      _("The maximum percentage of memory used by core.")
     );
     o.datatype = "and(uinteger, max(100))";
     o.placeholder = "80";

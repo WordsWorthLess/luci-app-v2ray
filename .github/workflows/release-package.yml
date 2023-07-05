@@ -1,9 +1,8 @@
 name: Package Build and Release
 on:
   push:
-    tags:
-      - '*'
-
+    tags: 
+      - 'v*.*.*'
 env:
   PACKAGE_NAME: luci-app-v2ray
   CACHE_DIR: ~/cache
@@ -12,23 +11,24 @@ jobs:
   build-release:
     runs-on: ubuntu-latest
     env:
-      SDK_URL_PATH: https://downloads.openwrt.org/releases/19.07.3/targets/x86/64
-      SDK_NAME: -sdk-19.07.3-x86-64_
+      SDK_URL_PATH: https://downloads.openwrt.org/releases/22.03.3/targets/x86/64
+      SDK_NAME: -sdk-22.03.3-x86-64_
       CONFIG_CCACHE: y
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         persist-credentials: false
         fetch-depth: 2
 
     - name: Setup Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: '12.x'
+        node-version: '16'
 
     - name: Setup Node.js Cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: node_modules
         key: node-${{ env.PACKAGE_NAME }}-${{ hashFiles('yarn.lock') }}
@@ -42,10 +42,10 @@ jobs:
 
     - name: Prepare Cache Key
       id: cache_key
-      run: echo "::set-output name=timestamp::$(date +"%s")"
+      run: echo "timestamp=$(date +"%s")" >> $GITHUB_OUTPUT
 
     - name: Setup OpenWrt Cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ${{ env.CACHE_DIR }}
         key: openwrt-${{ env.PACKAGE_NAME }}-${{ steps.cache_key.outputs.timestamp }}
@@ -55,7 +55,7 @@ jobs:
     - name: Install Dependencies
       run: |
         DEBIAN_FRONTEND=noninteractive \
-        sudo apt-get install -y ccache gettext libncurses5-dev xsltproc
+        sudo apt-get install -y ccache g++ gcc gettext libncurses5-dev python2 xsltproc
 
     - name: Create Directories
       run: |
@@ -75,15 +75,15 @@ jobs:
         test -d "$CCACHE_DIR_TARGET" || mkdir -p "$CCACHE_DIR_TARGET"
         test -d "$CCACHE_DIR_TOOLCHAIN" || mkdir -p "$CCACHE_DIR_TOOLCHAIN"
 
-        echo "::set-env name=CACHE_DIR_SDK::$CACHE_DIR_SDK"
-        echo "::set-env name=CACHE_DIR_DL::$CACHE_DIR_DL"
-        echo "::set-env name=CACHE_DIR_FEEDS::$CACHE_DIR_FEEDS"
+        echo "CACHE_DIR_SDK=$CACHE_DIR_SDK" >> $GITHUB_ENV
+        echo "CACHE_DIR_DL=$CACHE_DIR_DL" >> $GITHUB_ENV
+        echo "CACHE_DIR_FEEDS=$CACHE_DIR_FEEDS" >> $GITHUB_ENV
 
-        echo "::set-env name=CCACHE_DIR_HOST::$CCACHE_DIR_HOST"
-        echo "::set-env name=CCACHE_DIR_TARGET::$CCACHE_DIR_TARGET"
-        echo "::set-env name=CCACHE_DIR_TOOLCHAIN::$CCACHE_DIR_TOOLCHAIN"
+        echo "CCACHE_DIR_HOST=$CCACHE_DIR_HOST" >> $GITHUB_ENV
+        echo "CCACHE_DIR_TARGET=$CCACHE_DIR_TARGET" >> $GITHUB_ENV
+        echo "CCACHE_DIR_TOOLCHAIN=$CCACHE_DIR_TOOLCHAIN" >> $GITHUB_ENV
 
-        echo "::set-env name=SDK_HOME::$(mktemp -d)"
+        echo "SDK_HOME=$(mktemp -d)" >> $GITHUB_ENV
 
     - name: Download and Unzip SDK
       run: |
@@ -166,7 +166,7 @@ jobs:
         cd "$SDK_HOME"
 
         make defconfig
-        make package/${PACKAGE_NAME}/compile V=s
+        make package/${PACKAGE_NAME}/compile V=s -j2
 
         find "$SDK_HOME/bin/" -type f -name "*.ipk" -exec ls -lh {} \;
 

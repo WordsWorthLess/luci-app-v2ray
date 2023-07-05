@@ -1,8 +1,8 @@
 {
   "name": "luci-app-v2ray",
-  "version": "2.0.0",
-  "release": "1",
-  "description": "LuCI support for v2ray",
+  "version": "2.1.4",
+  "release": "2",
+  "description": "LuCI support for V2Ray & Xray",
   "repository": "git@github.com:kuoruan/luci-app-v2ray.git",
   "author": "Xingwang Liao <kuoruan@gmail.com>",
   "license": "MIT",

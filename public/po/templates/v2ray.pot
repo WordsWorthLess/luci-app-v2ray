@@ -1,1227 +1,1495 @@
-msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8"
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:88
-msgid "%s is required."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:95
-msgid "<code>transport</code> field in top level configuration, JSON string"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:271
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:286
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:335
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:400
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:412
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:461
-msgid "A list of HTTP headers, format: <code>header=value</code>. eg: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:19
-msgid "A list of bridges, format: <code>tag|domain</code>. eg: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:20
-msgid "A list of portals, format: <code>tag|domain</code>. eg: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:31
-msgid "A list of static addresses, format: <code>domain|address</code>. eg: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:35
-msgid "A platform for building proxies to bypass network restrictions."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:168
-msgid "APNIC delegated mirror"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-#: package/luasrc/controller/v2ray.lua:31
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:82
+#: src/view/v2ray/about.ts:36
 msgid "About"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:60
-msgid "Access log file"
+#: src/view/v2ray/about.ts:37
+msgid "LuCI support for V2Ray and Xray."
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:86
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:155
-msgid "Account password"
+#: src/view/v2ray/about.ts:40 src/view/v2ray/include/custom.ts:228
+#, lua-format
+msgid "Version: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:83
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:152
-msgid "Account user"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:32
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:182
-msgid "Add"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:37
-msgid "Add DNS servers here"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:37
-msgid "Add policy levels here"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:77
-msgid "Add routing balancers here"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:42
-msgid "Add routing rules here"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:43
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:57
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:218
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:258
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:308
-msgid "Address"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:57
-msgid "Address of the destination server."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:41
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:39
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:189
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:47
-msgid "Alias"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:79
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:98
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:109
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:171
-msgid "All connections share this level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:387
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:392
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:395
-msgid "Allocate"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:224
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:355
-msgid "Allow insecure"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:227
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:358
-msgid "Allow insecure ciphers"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:90
-msgid "Allow transparent"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:319
-msgid "Alter ID"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:71
-msgid "Attrs"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:145
-msgid "Auth"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
+#: src/view/v2ray/about.ts:44
+#, lua-format
 msgid "Author: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:327
-msgid "Auto"
+#: src/view/v2ray/about.ts:47
+#, lua-format
+msgid "Source: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:74
-msgid "Balancer tag"
+#: src/view/v2ray/about.ts:53
+#, lua-format
+msgid "Latest: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:37
-msgid "Balancers"
+#: src/view/v2ray/about.ts:59
+#, lua-format
+msgid "Report Bugs: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:19
-msgid "Bridges"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:63
-msgid "Buffer size"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:173
-msgid "CHNRoute"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:109
-msgid "CHNRoute list updated."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:165
-msgid "CN Direct"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:166
-msgid "CN Proxy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:240
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:371
-msgid "Certificate file"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:233
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:364
-msgid "Certificate usage"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:175
-msgid "Client ID"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:29
-msgid "Client IP"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:185
-msgid "Client User level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:178
-msgid "Client alter ID"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:182
-msgid "Client email"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:197
-msgid "Collecting data..."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:395
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:508
-msgid "Concurrency"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:57
-msgid "Config file"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:309
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:435
-msgid "Congestion enabled"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:48
-msgid "Connection idle"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-msgid "Current Config File: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:21
-#: package/luasrc/controller/v2ray.lua:21
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:42
-msgid "DNS"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:32
-msgid "DNS Servers"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:37
-msgid "DNS server"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:199
-msgid ""
-"DNS used for domains in direct list, format: <code>ip#port</code>. eg: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:198
-msgid ""
-"DNS used for domains in proxy list, format: <code>ip#port</code>. eg: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:66
-msgid "Debug"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:164
-msgid "Default"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:189
-msgid "Default alter ID"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:193
-msgid "Default user level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:383
-msgid "Dest override"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:21
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:23
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:13
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:21
-msgid "Details: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:197
-msgid "Detour to"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:199
-msgid "Direct list DNS"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:51
-msgid ""
-"Directory where geoip.dat and geosite.dat files are, default: same directory "
-"as V2Ray file."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:200
-msgid "Disable insecure encryption"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:230
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:361
-msgid "Disable system root"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:156
-msgid "Dismiss"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:51
-msgid "Domain"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:27
-msgid "Domain resolution strategy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:225
-msgid "Domain strategy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:47
-msgid "Domains"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
+#: src/view/v2ray/about.ts:65
+#, lua-format
 msgid "Donate: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:304
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:430
-msgid "Downlink capacity"
+#: src/view/v2ray/about.ts:69
+#, lua-format
+msgid "Current Config File: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:55
-msgid "Downlink only"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:113
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:255
-msgid "Email"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:143
-msgid "Empty field."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:150
-msgid "Enable proxy on selected interfaces."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:143
-msgid "Enable transparent proxy on Dokodemo-door port."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:26
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:381
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:41
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:91
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:93
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:506
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:28
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:17
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:26
-msgid "Enabled"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:69
-msgid "Error"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:72
-msgid "Error log file"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:49
-msgid "Expect IPs"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:193
-msgid "Extra direct list"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:188
-msgid "Extra proxy list"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:76
-msgid "Failed to decode GFWList."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:117
-msgid "Failed to fetch CHNRoute list."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:79
-msgid "Failed to fetch GFWList."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:29
+#: src/view/v2ray/about.ts:76
 msgid "Failed to open file."
 msgstr ""
 
-#: package/luasrc/controller/v2ray.lua:64
-msgid "Failed to request."
+#: src/view/v2ray/dns.ts:29
+msgid "DNS"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:372
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:501
-msgid "False"
+#: src/view/v2ray/dns.ts:30 src/view/v2ray/policy.ts:30
+#: src/view/v2ray/reverse.ts:29 src/view/v2ray/routing.ts:52
+#, lua-format
+msgid "Details: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:76
-msgid "Follow redirect"
+#: src/view/v2ray/dns.ts:41 src/view/v2ray/inbound.ts:863
+#: src/view/v2ray/main.ts:83 src/view/v2ray/main.ts:172
+#: src/view/v2ray/main.ts:179 src/view/v2ray/outbound.ts:508
+#: src/view/v2ray/outbound.ts:1474 src/view/v2ray/outbound.ts:1724
+#: src/view/v2ray/policy.ts:40 src/view/v2ray/reverse.ts:38
+#: src/view/v2ray/routing.ts:62
+msgid "Enabled"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:35
-msgid "For more information, please visit: %s"
+#: src/view/v2ray/dns.ts:44 src/view/v2ray/inbound.ts:856
+#: src/view/v2ray/outbound.ts:400 src/view/v2ray/outbound.ts:1687
+#: src/view/v2ray/routing.ts:202
+msgid "Tag"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:183
-msgid "GFWList"
+#: src/view/v2ray/dns.ts:50 src/view/v2ray/dns.ts:179
+msgid "Client IP"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:167
-msgid "GFWList Proxy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:178
-msgid "GFWList mirror"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:68
-msgid "GFWList updated."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:35
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:185
-msgid "General Settings"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:29
+#: src/view/v2ray/dns.ts:52
 msgid "Get my public IP address"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:198
-msgid "Getting..."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:35
-#: package/luasrc/controller/v2ray.lua:15
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:18
-msgid "Global Settings"
-msgstr ""
-
-#: package/root/usr/share/rpcd/acl.d/luci-app-v2ray.json:3
-msgid "Grant access to LuCI app V2ray"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:256
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:386
-msgid "HTTP request method"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:252
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:383
-msgid "HTTP request version"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:282
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:409
-msgid "HTTP response reason"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:278
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:406
-msgid "HTTP response status"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:274
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:403
-msgid "HTTP response version"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:45
-msgid "Handshake"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:246
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:322
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:359
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:377
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:448
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:485
-msgid "Header type"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:335
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:461
-msgid "Headers"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:338
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:464
-msgid "Host"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:31
+#: src/view/v2ray/dns.ts:60
 msgid "Hosts"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:162
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:53
-msgid "IP"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:163
+#: src/view/v2ray/dns.ts:62
+#, lua-format
 msgid ""
-"If enabled, iptables rules will be added to pre-filter traffic and then sent "
-"to V2Ray."
+"Host and domain mapping</br>format: <code>domain|ip1,ip2</code> or "
+"<code>domain-A|domain-B</code> eg: </br>%s or %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:65
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:76
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:374
+#: src/view/v2ray/dns.ts:69
+msgid "Domain Strategy"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:74
+msgid "Disable DNS Cache"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:75 src/view/v2ray/dns.ts:83 src/view/v2ray/dns.ts:91
+#: src/view/v2ray/dns.ts:176 src/view/v2ray/inbound.ts:837
+#: src/view/v2ray/inbound.ts:887 src/view/v2ray/outbound.ts:1624
+#: src/view/v2ray/outbound.ts:1636
+msgid "False"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:76 src/view/v2ray/dns.ts:84 src/view/v2ray/dns.ts:92
+#: src/view/v2ray/dns.ts:177 src/view/v2ray/inbound.ts:838
+#: src/view/v2ray/inbound.ts:888 src/view/v2ray/outbound.ts:1625
+#: src/view/v2ray/outbound.ts:1637
+msgid "True"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:81
+msgid "Disable Fallback Query"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:89
+msgid "Disable Fallback if got Matches"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:97
+msgid "DNS Servers"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:99
+msgid ""
+"Select DNS servers to use</br><code>Only 1 fakedns configuration can be "
+"enabled at the same time,prioritized by order</code>"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:109 src/view/v2ray/dns.ts:118
+msgid "DNS server"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:110
+msgid "Add DNS servers here"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:118 src/view/v2ray/inbound.ts:39
+#: src/view/v2ray/outbound.ts:385 src/view/v2ray/routing.ts:111
+msgid "Add"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:124 src/view/v2ray/inbound.ts:50
+#: src/view/v2ray/outbound.ts:396 src/view/v2ray/routing.ts:114
+msgid "Alias"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:128 src/view/v2ray/routing.ts:123
+msgid "Type"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:143 src/view/v2ray/inbound.ts:77
+#: src/view/v2ray/outbound.ts:453 src/view/v2ray/outbound.ts:665
+#: src/view/v2ray/outbound.ts:783 src/view/v2ray/outbound.ts:813
+#: src/view/v2ray/outbound.ts:863 src/view/v2ray/outbound.ts:941
+msgid "Address"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:148 src/view/v2ray/inbound.ts:60
+#: src/view/v2ray/inbound.ts:88 src/view/v2ray/outbound.ts:462
+#: src/view/v2ray/outbound.ts:675 src/view/v2ray/outbound.ts:793
+#: src/view/v2ray/outbound.ts:823 src/view/v2ray/outbound.ts:873
+#: src/view/v2ray/routing.ts:133
+msgid "Port"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:159
+msgid "Local Mode"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:160
+msgid "DNS Query through <code>Freedom</code> outbound"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:167
+msgid "Domains"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:170
+msgid "Expect IPs"
+msgstr ""
+
+#: src/view/v2ray/dns.ts:173
+msgid "Skip Fallback"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:28 src/view/v2ray/inbound.ts:39
+msgid "Inbound"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:43 src/view/v2ray/outbound.ts:389
+msgid "General Settings"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:44 src/view/v2ray/outbound.ts:390
+msgid "Stream Settings"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:45
+msgid "Other Settings"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:54
+msgid "Listen"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:64 src/view/v2ray/outbound.ts:409
+#: src/view/v2ray/routing.ts:167
+msgid "Protocol"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:78
+msgid "Address of the destination server."
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:89
+msgid "Port of the destination server."
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:99 src/view/v2ray/inbound.ts:289
+#: src/view/v2ray/inbound.ts:446 src/view/v2ray/outbound.ts:441
+#: src/view/v2ray/outbound.ts:1035 src/view/v2ray/routing.ts:137
+msgid "Network"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:101 src/view/v2ray/inbound.ts:128
+#: src/view/v2ray/inbound.ts:846
 msgid ""
 "If transparent proxy enabled on current inbound, this option will be ignored."
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:495
-msgid ""
-"If transparent proxy is enabled, this option is ignored and will be set to "
-"255."
+#: src/view/v2ray/inbound.ts:114 src/view/v2ray/inbound.ts:178
+msgid "Timeout"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:519
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:521
-msgid "Import"
+#: src/view/v2ray/inbound.ts:115 src/view/v2ray/inbound.ts:179
+msgid "Time limit for inbound data(seconds)"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:116
-msgid "Imported %d links."
+#: src/view/v2ray/inbound.ts:126
+msgid "Follow redirect"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:25
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:32
-#: package/luasrc/controller/v2ray.lua:17
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:26
-msgid "Inbound"
+#: src/view/v2ray/inbound.ts:138 src/view/v2ray/inbound.ts:190
+#: src/view/v2ray/inbound.ts:221 src/view/v2ray/inbound.ts:270
+#: src/view/v2ray/inbound.ts:358 src/view/v2ray/outbound.ts:570
+#: src/view/v2ray/outbound.ts:713 src/view/v2ray/outbound.ts:772
+#: src/view/v2ray/outbound.ts:916
+msgid "User level"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:65
-msgid "Inbound tag"
+#: src/view/v2ray/inbound.ts:139 src/view/v2ray/inbound.ts:191
+#: src/view/v2ray/inbound.ts:222 src/view/v2ray/inbound.ts:359
+msgid "All connections share this level"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:79
-msgid "Inbounds enabled"
+#: src/view/v2ray/inbound.ts:150 src/view/v2ray/inbound.ts:315
+msgid "Account user"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:67
-msgid "Info"
+#: src/view/v2ray/inbound.ts:159 src/view/v2ray/inbound.ts:324
+msgid "Account password"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:98
-msgid "Invalid JSON content."
+#: src/view/v2ray/inbound.ts:169
+msgid "Allow transparent"
 msgstr ""
 
-#: package/luasrc/controller/v2ray.lua:43
-msgid "Invalid url"
+#: src/view/v2ray/inbound.ts:202
+msgid "User email"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:355
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:481
-msgid "Key"
+#: src/view/v2ray/inbound.ts:211
+msgid "User secret"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:243
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:374
-msgid "Key file"
+#: src/view/v2ray/inbound.ts:233 src/view/v2ray/outbound.ts:656
+msgid "Email"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:150
-msgid "LAN interfaces"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-msgid "Latest: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:42
-msgid "Level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:30
-msgid "Levels"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:68
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:109
-msgid "List Update"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:41
-msgid "Listen"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:113
-msgid "Listtype is required"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:200
-msgid "Local devices direct outbound list"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:64
-msgid "Log level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-msgid "LuCI support for V2Ray."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:495
-msgid "Mark"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:289
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:415
-msgid "Maximum transmission unit (MTU)"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:54
-msgid "Memory percentage"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:116
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:266
+#: src/view/v2ray/inbound.ts:242 src/view/v2ray/outbound.ts:685
 msgid "Method"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:506
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:508
-msgid "Mux"
+#: src/view/v2ray/inbound.ts:260 src/view/v2ray/inbound.ts:308
+#: src/view/v2ray/outbound.ts:610 src/view/v2ray/outbound.ts:703
+#: src/view/v2ray/outbound.ts:762 src/view/v2ray/outbound.ts:803
+msgid "Password"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:65
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:139
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:203
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:212
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:335
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:58
-msgid "Network"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:149
-msgid "No Auth"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:129
-msgid "No links imported."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:214
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:250
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:326
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:352
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:363
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:59
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:70
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:210
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:330
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:346
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:381
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:452
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:478
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:489
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:144
-msgid "None"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:180
-msgid "Not Running"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:126
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:134
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:73
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:114
-msgid "OK"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:286
-msgid "OTA"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:379
-msgid "Off"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:136
+#: src/view/v2ray/inbound.ts:280
 msgid "One Time Auth (OTA)"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:188
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:193
-msgid "One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s"
+#: src/view/v2ray/inbound.ts:302
+msgid "Auth"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:200
-msgid "One address per line. Allow types: IP, CIDR. eg: %s, %s"
+#: src/view/v2ray/inbound.ts:307
+msgid "No Auth"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:158
-msgid "Only privileged ports"
+#: src/view/v2ray/inbound.ts:334
+msgid "UDP"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:158
-msgid "Only redirect traffic on ports below 1024."
+#: src/view/v2ray/inbound.ts:343 src/view/v2ray/routing.ts:130
+msgid "IP"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:197
+#: src/view/v2ray/inbound.ts:344
+msgid "IP address of current host"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:370
+msgid "Client ID"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:379
+msgid "Client alter ID"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:389
+msgid "Client email"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:398
+msgid "Client User level"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:408
+msgid "Default alter ID"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:418
+msgid "Default user level"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:428
+msgid "Detour to"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:430
 msgid ""
 "Optional feature to suggest client to take a detour. If specified, this "
 "inbound will instruct the outbound to use another inbound."
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:37
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:187
-msgid "Other Settings"
+#: src/view/v2ray/inbound.ts:440
+msgid "Disable insecure encryption"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:175
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:182
-#: package/luasrc/controller/v2ray.lua:19
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:34
-msgid "Outbound"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:116
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:129
-msgid "Outbound Import"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:73
-msgid "Outbound tag"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:85
-msgid "Outbounds enabled"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:128
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:150
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:251
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:278
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:300
-msgid "Password"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:332
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:341
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:345
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:458
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:467
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:471
-msgid "Path"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:23
-#: package/luasrc/controller/v2ray.lua:25
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:58
-msgid "Policy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:37
-msgid "Policy Level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:44
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:47
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:61
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:221
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:262
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:312
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:55
-msgid "Port"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:61
-msgid "Port of the destination server."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:20
-msgid "Portals"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:50
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:197
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:66
-msgid "Protocol"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:198
-msgid "Proxy list DNS"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:163
-msgid "Proxy mode"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:504
-msgid "Proxy settings"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:312
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:438
-msgid "Read buffer size"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:233
-msgid "Redirect"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:160
-msgid "Redirect DNS"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:160
-msgid "Redirect DNS traffic to V2Ray."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:159
-msgid "Redirect UDP"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:159
-msgid "Redirect UDP traffic to V2Ray."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:143
-msgid "Redirect port"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:392
-msgid "Refresh"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:45
-msgid "Reload"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:43
-msgid "Reload Service"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:23
-msgid "Reload service failed with code %d"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-msgid "Report Bugs: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:271
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:400
-msgid "Request headers"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:268
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:397
-msgid "Request path"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:286
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:412
-msgid "Response headers"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:206
-msgid "Response type"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:13
-#: package/luasrc/controller/v2ray.lua:27
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:66
-msgid "Reverse"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:21
-#: package/luasrc/controller/v2ray.lua:23
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:50
-msgid "Routing"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:77
-msgid "Routing Balancer"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:42
-msgid "Routing Rule"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:32
-msgid "Rules"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:183
-msgid "Running"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:166
-msgid "Save"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:211
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:348
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:323
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:343
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:474
+#: src/view/v2ray/inbound.ts:455 src/view/v2ray/inbound.ts:793
+#: src/view/v2ray/outbound.ts:902 src/view/v2ray/outbound.ts:1046
+#: src/view/v2ray/outbound.ts:1548
 msgid "Security"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:32
-msgid "Select DNS servers to use"
+#: src/view/v2ray/inbound.ts:458 src/view/v2ray/inbound.ts:550
+#: src/view/v2ray/inbound.ts:729 src/view/v2ray/inbound.ts:798
+#: src/view/v2ray/inbound.ts:821 src/view/v2ray/main.ts:133
+#: src/view/v2ray/main.ts:146 src/view/v2ray/outbound.ts:433
+#: src/view/v2ray/outbound.ts:636 src/view/v2ray/outbound.ts:910
+#: src/view/v2ray/outbound.ts:1050 src/view/v2ray/outbound.ts:1239
+#: src/view/v2ray/outbound.ts:1413 src/view/v2ray/outbound.ts:1553
+#: src/view/v2ray/outbound.ts:1574 src/view/v2ray/outbound.ts:1654
+#: src/view/v2ray/outbound.ts:1697 src/view/v2ray/transparent-proxy.ts:155
+msgid "None"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:30
-msgid "Select policy levels"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:37
-msgid "Select routing balancers to use"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:32
-msgid "Select routing rules to use"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:82
-msgid "Selector"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:191
-msgid "Send through"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:240
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:289
-msgid "Server address"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:216
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:348
+#: src/view/v2ray/inbound.ts:466 src/view/v2ray/outbound.ts:1095
 msgid "Server name"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:244
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:293
-msgid "Server port"
+#: src/view/v2ray/inbound.ts:486 src/view/v2ray/outbound.ts:1110
+msgid "Allow insecure"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:47
-msgid "Set the V2Ray executable file path."
+#: src/view/v2ray/inbound.ts:495 src/view/v2ray/outbound.ts:1119
+msgid "Allow insecure ciphers"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:95
-msgid "Settings"
+#: src/view/v2ray/inbound.ts:504 src/view/v2ray/outbound.ts:1128
+msgid "Disable system root"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:157
-msgid "Setup redirect rules with TProxy."
+#: src/view/v2ray/inbound.ts:513 src/view/v2ray/outbound.ts:1137
+msgid "Certificate usage"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:381
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:383
-msgid "Sniffing"
+#: src/view/v2ray/inbound.ts:526 src/view/v2ray/outbound.ts:1150
+msgid "Certificate file"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:369
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:374
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:495
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:498
-msgid "Sockopt"
+#: src/view/v2ray/inbound.ts:535 src/view/v2ray/outbound.ts:1155
+msgid "Key file"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:61
-msgid "Source"
+#: src/view/v2ray/inbound.ts:545 src/view/v2ray/inbound.ts:724
+#: src/view/v2ray/inbound.ts:816 src/view/v2ray/outbound.ts:1234
+#: src/view/v2ray/outbound.ts:1408 src/view/v2ray/outbound.ts:1569
+msgid "Header type"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-msgid "Source: %s"
+#: src/view/v2ray/inbound.ts:557 src/view/v2ray/outbound.ts:1246
+msgid "HTTP request version"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:91
-msgid "Stats"
+#: src/view/v2ray/inbound.ts:567 src/view/v2ray/outbound.ts:1255
+msgid "HTTP request method"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:36
-msgid "Stats inbound downlink"
+#: src/view/v2ray/inbound.ts:585 src/view/v2ray/outbound.ts:1272
+msgid "Request path"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:35
-msgid "Stats inbound uplink"
+#: src/view/v2ray/inbound.ts:594 src/view/v2ray/outbound.ts:1281
+msgid "Request headers"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:61
-msgid "Stats user downlink"
+#: src/view/v2ray/inbound.ts:596 src/view/v2ray/inbound.ts:638
+#: src/view/v2ray/inbound.ts:752 src/view/v2ray/outbound.ts:1283
+#: src/view/v2ray/outbound.ts:1322 src/view/v2ray/outbound.ts:1436
+#, lua-format
+msgid "A list of HTTP headers, format: <code>header=value</code>. eg: %s"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:59
-msgid "Stats user uplink"
+#: src/view/v2ray/inbound.ts:606 src/view/v2ray/outbound.ts:1293
+msgid "HTTP response version"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:387
-msgid "Strategy"
+#: src/view/v2ray/inbound.ts:616 src/view/v2ray/outbound.ts:1302
+msgid "HTTP response status"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:36
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:186
-msgid "Stream Settings"
+#: src/view/v2ray/inbound.ts:626 src/view/v2ray/outbound.ts:1311
+msgid "HTTP response reason"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:35
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:36
-msgid "System"
+#: src/view/v2ray/inbound.ts:636 src/view/v2ray/outbound.ts:1320
+msgid "Response headers"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:369
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:498
-msgid "TCP fast open"
+#: src/view/v2ray/inbound.ts:649 src/view/v2ray/outbound.ts:1333
+msgid "Maximum transmission unit (MTU)"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:374
-msgid "TProxy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:28
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:380
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:503
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:504
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:80
-msgid "Tag"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:54
-msgid "The maximum percentage of memory used by V2Ray."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:43
-msgid "This will restart service when config file changes."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:71
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:93
-msgid "Time limit for inbound data(seconds)"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:128
-msgid "Time: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:71
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:93
-msgid "Timeout"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:128
-msgid "Total: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:294
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:420
+#: src/view/v2ray/inbound.ts:660 src/view/v2ray/outbound.ts:1344
 msgid "Transmission time interval (TTI)"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:140
-#: package/luasrc/controller/v2ray.lua:29
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:74
-msgid "Transparent Proxy"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:93
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:95
-msgid "Transport"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:373
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:502
-msgid "True"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:49
-msgid "Type"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:159
-msgid "UDP"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:174
-msgid "Unable to get V2Ray version."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:129
-msgid "Unexpected error."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:48
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:117
-msgid "Unknown"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:175
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:185
-msgid "Update"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:299
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:425
+#: src/view/v2ray/inbound.ts:671 src/view/v2ray/outbound.ts:1355
 msgid "Uplink capacity"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:51
-msgid "Uplink only"
+#: src/view/v2ray/inbound.ts:682 src/view/v2ray/outbound.ts:1366
+msgid "Downlink capacity"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:157
-msgid "Use TProxy"
+#: src/view/v2ray/inbound.ts:693 src/view/v2ray/outbound.ts:1377
+msgid "Congestion enabled"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:57
-msgid "Use custom config file."
+#: src/view/v2ray/inbound.ts:702 src/view/v2ray/outbound.ts:1386
+msgid "Read buffer size"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:248
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:297
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:63
-msgid "User"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:316
-msgid "User ID"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:102
-msgid "User email"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:79
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:98
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:109
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:132
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:171
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:236
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:282
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:304
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:331
-msgid "User level"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:105
-msgid "User secret"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:21
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:25
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:175
-#: package/htdocs/luci-static/resources/view/v2ray/policy.js:23
-#: package/htdocs/luci-static/resources/view/v2ray/reverse.js:13
-#: package/htdocs/luci-static/resources/view/v2ray/routing.js:21
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:140
-#: package/luasrc/controller/v2ray.lua:13
-msgid "V2Ray"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:51
-msgid "V2Ray asset location"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:47
-msgid "V2Ray file"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:35
-#: package/root/usr/share/luci/menu.d/luci-app-v2ray.json:3
-msgid "V2ray"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-#: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:172
-msgid "Version: %s"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/main.js:68
-msgid "Warning"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:329
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:366
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:455
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:492
-msgid "Wechat Video"
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:162
-msgid ""
-"When UDP is enabled, V2Ray needs to know the IP address of current host."
-msgstr ""
-
-#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:317
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:443
+#: src/view/v2ray/inbound.ts:713 src/view/v2ray/outbound.ts:1397
 msgid "Write buffer size"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:140
+#: src/view/v2ray/inbound.ts:732 src/view/v2ray/inbound.ts:824
+#: src/view/v2ray/outbound.ts:1416 src/view/v2ray/outbound.ts:1577
+msgid "Wechat Video"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:741 src/view/v2ray/inbound.ts:772
+#: src/view/v2ray/inbound.ts:783 src/view/v2ray/outbound.ts:1425
+#: src/view/v2ray/outbound.ts:1527 src/view/v2ray/outbound.ts:1538
+msgid "Path"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:750 src/view/v2ray/outbound.ts:620
+#: src/view/v2ray/outbound.ts:1434
+msgid "Headers"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:763 src/view/v2ray/outbound.ts:1518
+msgid "Host"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:806 src/view/v2ray/outbound.ts:1561
+msgid "Key"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:833 src/view/v2ray/inbound.ts:844
+#: src/view/v2ray/outbound.ts:1586 src/view/v2ray/outbound.ts:1599
+#: src/view/v2ray/outbound.ts:1619 src/view/v2ray/outbound.ts:1631
+msgid "Sockopt"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:833 src/view/v2ray/outbound.ts:1619
+msgid "TCP fast open"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:844
+msgid "TProxy"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:853
+msgid "Off"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:863 src/view/v2ray/inbound.ts:871
+msgid "Sniffing"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:871
+msgid "Dest override"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:884
+msgid "Metadata Only"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:894
+msgid "Domains Excluded"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:899
+msgid "Route Only"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:906 src/view/v2ray/inbound.ts:917
+#: src/view/v2ray/inbound.ts:926
+msgid "Allocate"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:906
+msgid "Strategy"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:917
+msgid "Refresh"
+msgstr ""
+
+#: src/view/v2ray/inbound.ts:926
+msgid "Concurrency"
+msgstr ""
+
+#: src/view/v2ray/main.ts:31
+#, lua-format
+msgid "Reload service failed with code %d"
+msgstr ""
+
+#: src/view/v2ray/main.ts:66
+msgid "Global Settings"
+msgstr ""
+
+#: src/view/v2ray/main.ts:68
+msgid "A platform for building proxies to bypass network restrictions."
+msgstr ""
+
+#: src/view/v2ray/main.ts:69
+#, lua-format
+msgid "For more information, please visit: %s"
+msgstr ""
+
+#: src/view/v2ray/main.ts:89
+msgid "Reload Service"
+msgstr ""
+
+#: src/view/v2ray/main.ts:90
+msgid "This will restart service when config file changes."
+msgstr ""
+
+#: src/view/v2ray/main.ts:93
+msgid "Reload"
+msgstr ""
+
+#: src/view/v2ray/main.ts:99
+msgid "Core file"
+msgstr ""
+
+#: src/view/v2ray/main.ts:100
+msgid "Location of the core binary."
+msgstr ""
+
+#: src/view/v2ray/main.ts:109
+msgid "Assets location"
+msgstr ""
+
+#: src/view/v2ray/main.ts:111
+msgid ""
+"Directory where geoip.dat and geosite.dat files are, default: same directory "
+"as core binary."
+msgstr ""
+
+#: src/view/v2ray/main.ts:120
+msgid "Memory percentage"
+msgstr ""
+
+#: src/view/v2ray/main.ts:121
+msgid "The maximum percentage of memory used by core."
+msgstr ""
+
+#: src/view/v2ray/main.ts:129
+msgid "Config file"
+msgstr ""
+
+#: src/view/v2ray/main.ts:130
+msgid "Use custom config file."
+msgstr ""
+
+#: src/view/v2ray/main.ts:135
+msgid "Access log file"
+msgstr ""
+
+#: src/view/v2ray/main.ts:140
+msgid "Log level"
+msgstr ""
+
+#: src/view/v2ray/main.ts:142
+msgid "Debug"
+msgstr ""
+
+#: src/view/v2ray/main.ts:143 src/view/v2ray/outbound.ts:1164
+msgid "Info"
+msgstr ""
+
+#: src/view/v2ray/main.ts:144
+msgid "Warning"
+msgstr ""
+
+#: src/view/v2ray/main.ts:145
+msgid "Error"
+msgstr ""
+
+#: src/view/v2ray/main.ts:149
+msgid "Error log file"
+msgstr ""
+
+#: src/view/v2ray/main.ts:157
+msgid "Inbounds enabled"
+msgstr ""
+
+#: src/view/v2ray/main.ts:163
+msgid "Outbounds enabled"
+msgstr ""
+
+#: src/view/v2ray/main.ts:172
+msgid "Stats"
+msgstr ""
+
+#: src/view/v2ray/main.ts:179 src/view/v2ray/main.ts:186
+msgid "Transport"
+msgstr ""
+
+#: src/view/v2ray/main.ts:186
+msgid "Settings"
+msgstr ""
+
+#: src/view/v2ray/main.ts:187
+msgid "<code>transport</code> field in top level configuration, JSON string"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:34
+msgid "Invalid WireGuard key"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:41 src/view/v2ray/outbound.ts:51
+#: src/view/v2ray/outbound.ts:67 src/view/v2ray/outbound.ts:86
+#: src/view/v2ray/outbound.ts:108
+msgid "Expecting"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:42 src/view/v2ray/outbound.ts:52
+msgid "'value1,value2,value3'"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:43 src/view/v2ray/outbound.ts:53
+msgid "each value should be an integer between 0-255"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:68 src/view/v2ray/outbound.ts:87
+#: src/view/v2ray/outbound.ts:109
+msgid "One of the following"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:69 src/view/v2ray/outbound.ts:88
+msgid "Integers greater than 0"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:70 src/view/v2ray/outbound.ts:89
+#: src/view/v2ray/outbound.ts:112
+msgid "A range of integers which are greater than 0"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:110
+msgid "msgid "an integer greater than 0 corresponding to the sequence number of the packet""
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:111
+msgid "eg: '5' for the fifth packet'"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:113
+msgid "eg: '1-3' for the 1st to 3rd packets"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:117
+msgid "Unknown Data"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:233 src/view/v2ray/outbound.ts:256
+msgid "Outbound Import"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:234
+#, lua-format
+msgid "Imported %d links."
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:250 src/view/v2ray/outbound.ts:267
+#: src/view/v2ray/transparent-proxy.ts:64
+#: src/view/v2ray/transparent-proxy.ts:74
+#: src/view/v2ray/transparent-proxy.ts:100
+#: src/view/v2ray/transparent-proxy.ts:110
+msgid "OK"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:257
+msgid "No links imported."
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:276
 msgid "You can add multiple links at once, one link per line."
 msgstr ""
 
-#: package/luasrc/controller/v2ray.lua:53
-msgctxt "libustream-openssl"
-msgid "wget: SSL support not available, please install %s or %s."
+#: src/view/v2ray/outbound.ts:279
+msgid "Empty field."
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:283
+msgid "Invalid links."
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:290
+msgid "Import Vmess Links"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:295
+#, lua-format
+msgid "Allowed link format: <code>%s</code>"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:306
+msgid "Dismiss"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:332
+msgid "Save"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:374 src/view/v2ray/outbound.ts:385
+msgid "Outbound"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:391
+msgid "Mux Settings"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:403
+msgid "Send through"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:428
+msgid "Response type"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:472
+msgid "Non IP Queries"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:476 src/view/v2ray/outbound.ts:1677
+#: src/view/v2ray/transparent-proxy.ts:237
+msgid "Default"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:477
+msgid "Drop"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:478 src/view/v2ray/outbound.ts:1761
+msgid "Skip"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:485 src/view/v2ray/outbound.ts:1599
+msgid "Domain strategy"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:499
+msgid "Redirect"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:508
+msgid "TCP Fragmentize"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:520 src/view/v2ray/outbound.ts:536
+#: src/view/v2ray/outbound.ts:552
+msgid "Fragment"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:520
+msgid "Length"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:536
+msgid "Interval"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:552
+msgid "Packets"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:563
+msgid "TLS Hello Packet"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:564
+msgid "All Packets"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:581 src/view/v2ray/outbound.ts:733
+msgid "Server address"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:591 src/view/v2ray/outbound.ts:743
+msgid "Server port"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:601 src/view/v2ray/outbound.ts:753
+#: src/view/v2ray/routing.ts:149
+msgid "User"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:621
+msgid "Custom HTTP Headers,format: <code>header=value</code>"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:632 src/view/v2ray/routing.ts:152
+msgid "Inbound Tag"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:723
+msgid "OTA"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:833 src/view/v2ray/outbound.ts:883
+msgid "User ID"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:842
+msgid "User Level"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:852
+msgid "Encryption"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:892
+msgid "Alter ID"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:907
+msgid "Auto"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:928
+msgid "Private Key"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:952
+msgid "Endpoint"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:964 src/view/v2ray/outbound.ts:1207
+msgid "Public Key"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:977
+msgid "Pre-Shared Key"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:988
+msgid "Allowed IPs"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1000
+msgid "Keep Alive"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1008
+msgid "MTU"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1019
+msgid "Reserved Bytes"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1061
+msgid "Flow"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1165
+msgid "Show REALITY Debug Info"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1169
+msgid "Show"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1170
+msgid "Hide"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1176
+msgid "fingerprint"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1196
+msgid "Server Name"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1213
+msgid "Short ID"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1223
+msgid "Spider Parameters"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1448
+msgid "Service"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1448
+msgid "Name"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1458
+msgid "Mode"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1469
+msgid "Health Check"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1473
+msgid "Disabled"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1480
+msgid "Idle Timeout"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1481
+msgid "No less than 10 seconds"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1493
+msgid "Health Check timeout"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1504
+msgid "Initial Windows Size"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1506
+msgid ""
+"While connecting through Cloudflare CDN</br> set Initial Windows Size "
+"greater than <code>65536</code> to disable Dynamic Window mechanism"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1586
+msgid "Mark"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1588
+msgid ""
+"If transparent proxy is enabled, this option is ignored and will be set to "
+"255."
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1631
+msgid "TCP No Delay"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1643
+msgid "Dialer Proxy"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1652 src/view/v2ray/outbound.ts:1695
+msgid "Unable to use current outbound itself as proxy"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1673
+msgid "Congestion Control"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1687
+msgid "Proxy settings"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1724
+msgid "Mux"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1734
+msgid "Mux Concurrency"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1744
+msgid "xudp Concurrency"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1755
+msgid "Proxy UDP443"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1759
+msgid "Reject"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1760
+msgid "Allow"
+msgstr ""
+
+#: src/view/v2ray/outbound.ts:1776 src/view/v2ray/outbound.ts:1779
+msgid "Import (Vmess Only)"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:29
+msgid "Policy"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:46
+msgid "Levels"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:47
+msgid "Select policy levels"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:56 src/view/v2ray/policy.ts:62
+msgid "System"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:56
+msgid "Stats inbound uplink"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:62
+msgid "Stats inbound downlink"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:68
+msgid "Policy Level"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:69
+msgid "Add policy levels here"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:76
+msgid "Level"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:80
+msgid "Handshake"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:84
+msgid "Connection idle"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:88
+msgid "Uplink only"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:93
+msgid "Downlink only"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:98
+msgid "Stats user uplink"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:101
+msgid "Stats user downlink"
+msgstr ""
+
+#: src/view/v2ray/policy.ts:104
+msgid "Buffer size"
+msgstr ""
+
+#: src/view/v2ray/reverse.ts:28
+msgid "Reverse"
+msgstr ""
+
+#: src/view/v2ray/reverse.ts:44
+msgid "Bridges"
+msgstr ""
+
+#: src/view/v2ray/reverse.ts:45
+#, lua-format
+msgid "A list of bridges, format: <code>tag|domain</code>. eg: %s"
+msgstr ""
+
+#: src/view/v2ray/reverse.ts:53
+msgid "Portals"
+msgstr ""
+
+#: src/view/v2ray/reverse.ts:54
+#, lua-format
+msgid "A list of portals, format: <code>tag|domain</code>. eg: %s"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:51
+msgid "Routing"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:67
+msgid "Domain Matching Strategy"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:70
+msgid "Match with the domain-based rules only."
+msgstr ""
+
+#: src/view/v2ray/routing.ts:75
+msgid "If no domain-based rules were matched, resolve domain and try matching with the </span>IP-based rules</span>."
+msgstr ""
+
+#: src/view/v2ray/routing.ts:82
+msgid "Whenever IP-based rules are encountered, resolve domain and match the rules using IP address immediately."
+msgstr ""
+
+#: src/view/v2ray/routing.ts:70
+msgid "Match with the domain-based rules only."
+msgstr ""
+
+#: src/view/v2ray/routing.ts:72 src/view/v2ray/routing.ts:118
+msgid "Domain Matcher"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:79
+msgid "Rules"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:80
+msgid "Select routing rules to use"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:89
+msgid "Balancers"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:90
+msgid "Select routing balancers to use"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:99 src/view/v2ray/routing.ts:111
+msgid "Routing Rule"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:100
+msgid "Add routing rules here"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:127
+msgid "Domain"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:141
+msgid "Source"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:145
+msgid "Source Port"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:173
+msgid "Attrs"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:176
+msgid "Outbound tag"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:190
+msgid "Balancer tag"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:197
+msgid "Add routing balancers here"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:197
+msgid "Routing Balancer"
+msgstr ""
+
+#: src/view/v2ray/routing.ts:205
+msgid "Selector"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:59
+#: src/view/v2ray/transparent-proxy.ts:95
+msgid "List Update"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:60
+msgid "GFWList updated."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:68
+#: src/view/v2ray/transparent-proxy.ts:104
+msgid "Update Failed"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:96
+msgid "China Route Lists updated."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:122
+msgid "Unexpected error."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:138
+msgid "Transparent Proxy"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:152
+msgid "Redirect port"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:153
+msgid "Enable transparent proxy on Dokodemo-door port."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:164
+msgid "LAN interfaces"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:165
+msgid "Enable proxy on selected interfaces."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:177
+msgid "Use TProxy"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:178
+msgid "Setup redirect rules with TProxy."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:181
+msgid "Proxy IPv6"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:185
+msgid "Only privileged ports"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:186
+msgid "Only redirect traffic on ports below 1024."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:192
+msgid "Redirect UDP"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:193
+msgid "Redirect UDP traffic to"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:199
+msgid "Redirect DNS"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:200
+msgid "Redirect DNS queries to"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:208
+msgid "Excluded TCP Source Port(s)"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:210
+msgid ""
+"Outgoing TCP Traffic from the given port(s) will be ignored by Transparent "
+"Proxy."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:219
+msgid "Excluded UDP Source Port(s)"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:221
+msgid ""
+"Outgoing UDP Traffic from the given port(s) will be ignored by Transparent "
+"Proxy."
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:231
+msgid "Proxy mode"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:233
+msgid "Apply firewall rules to Pre-filter traffic before sending to"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:238
+msgid "CN Direct"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:239
+msgid "CN Proxy"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:240
+msgid "GFWList Proxy"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:245
+msgid "APNIC delegated mirror"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:252
+msgid "CHNRoute"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:254
+#: src/view/v2ray/transparent-proxy.ts:266
+msgid "Update"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:258
+msgid "GFWList mirror"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:264
+msgid "GFWList"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:273
+msgid "Extra proxy list"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:275
+#: src/view/v2ray/transparent-proxy.ts:288
+#, lua-format
+msgid "One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:286
+msgid "Extra direct list"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:299
+msgid "Proxy list DNS"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:301
+#, lua-format
+msgid ""
+"DNS used for domains in proxy list, format: <code>ip#port</code>. eg: %s"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:308
+msgid "Direct list DNS"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:310
+#, lua-format
+msgid ""
+"DNS used for domains in direct list, format: <code>ip#port</code>. eg: %s"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:317
+msgid "Local devices direct outbound list"
+msgstr ""
+
+#: src/view/v2ray/transparent-proxy.ts:318
+#, lua-format
+msgid "One address per line. Allow types: IP, CIDR. eg: %s, %s"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:45 src/view/v2ray/include/custom.ts:119
+msgid "Unknown"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:86
+#, lua-format
+msgid "%s is required."
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:98
+msgid "Invalid JSON content."
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:114
+msgid "Listtype is required"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:138
+#, lua-format
+msgid "Entries: %s"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:140
+#, lua-format
+msgid "Last update: %s"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:229
+msgid "Unable to get core version."
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:234
+msgid "Not Running"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:235
+msgid "Running"
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:251
+msgid "Collecting data..."
+msgstr ""
+
+#: src/view/v2ray/include/custom.ts:254
+msgid "Getting..."
+msgstr ""
+
+msgid "Valid domain matching rules:"
+msgstr ""
+
+msgid "match by subdomain , eg: \"domain:google.com\""
+msgstr ""
+
+msgid "strict match, eg: \"full:ipv6.google.com\""
+msgstr ""
+
+msgid "match by predefined domain list, eg: \"geosite:google\""
+msgstr ""
+
+msgid "match by keywords, eg: \"keyword:google\""
+msgstr ""
+
+msgid "match by regular expression, eg: \"regexp:\\.goo.*gle\\.com\""
+msgstr ""
+
+msgid "plain string, eg: \"google.com\""
+msgstr ""
+
+msgid "an integer greater than 0 corresponding to the sequence number of the packet"
+msgstr ""
+
+msgid "Valid mapping objects:"
+msgstr ""
+
+msgid "IP address, eg: \"8.8.8.8\""
+msgstr ""
+
+msgid "IP address array, eg: \"8.8.8.8,2001:4860:4860::8888,8.8.4.4\""
+msgstr ""
+
+msgid "domain name, eg: \"www.google.com\""
+msgstr ""
+
+msgid "CIDR, eg: \"2606:4700::/32\""
+msgstr ""
+
+msgid "Predifined IP List, eg: \"geoip:us\""
+msgstr ""
+
+msgid "domain matching rules"
+msgstr ""
+
+msgid "Invalid Input"
 msgstr ""

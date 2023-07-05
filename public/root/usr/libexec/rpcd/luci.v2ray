@@ -32,7 +32,8 @@ check_running_status() {
 
 get_v2ray_version() {
 	local file="$(uci -q get v2ray.main.v2ray_file)"
-
+	local core
+	local ver
 	if [ ! -s "$file" ] ; then
 		echo '{ "code": 1 }'
 		return
@@ -43,9 +44,37 @@ get_v2ray_version() {
 	local version="$(sh -c "$file --version 2>/dev/null | head -n1")"
 
 	if [ -n "$version" ] ; then
-		printf '{ "code": 0, "version": "%s" }\n' "$version"
+		core=$(echo $version | awk -F' ' '{printf $1}')
+		ver=$(echo $version | awk -F' ' '{printf $2}')
+		uci set v2ray.main.core=$core
+		uci set v2ray.main.version=$ver
+
+		if [ "$(expr $ver \>= '1.8.0')" = "1" ] && [ "$core" = "Xray" ] ; then
+			uci set v2ray.main.reality=1
+		else
+			uci set v2ray.main.reality=0
+		fi
+		uci commit
+		printf '{ "code": 0, "version": "  Core:%s   Version:%s" }\n' "$core" "$ver"
 	else
-		echo '{ "code": 1 }'
+		version="$(sh -c "$file version 2>/dev/null | head -n1")"
+		if [ -z "$version" ] ; then
+			echo '{ "code": 1 }'
+			return
+		else
+			core=$(echo $version | awk -F' ' '{printf $1}')
+			if [ "$core" != "V2Ray" ] ; then
+				echo '{ "code": 1 }'
+				return
+			else
+				ver=$(echo $version | awk -F' ' '{printf $2}')
+				uci set v2ray.main.core=$core
+				uci set v2ray.main.version=$ver
+				uci set v2ray.main.reality=0
+				uci commit
+				printf '{ "code": 0, "version": "  Core:%s   Version:%s" }\n' "$core" "$ver"
+			fi
+		fi
 	fi
 }
 
