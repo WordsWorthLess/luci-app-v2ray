@@ -13,8 +13,20 @@ config v2ray 'main'
 
 config dns 'main_dns'
 	option enabled '1'
-	list hosts 'example.com|127.0.0.1'
+	list hosts_override 'ad_block'
+	list hosts_override 'xbox_download_cdn'
 	option servers 'cloudflare_dns_1 google_dns_1 114_dns_1 ali_dns_1'
+
+config host_mapping 'ad_block'
+	option alias 'block ads'
+	option host_domain 'geosite:category-ads'
+	list host_ip '127.0.0.1'
+	list host_ip '::1'
+
+config	host_mapping 'xbox_download_cdn'
+	option alias 'Xbox Game Download CDN Shenzhen'
+	option host_domain 'regexp:^assets[12]{1}\.xboxlive\.[comn]{2,3}$'
+	list host_ip '183.240.68.55'
 
 config dns_server 'cloudflare_dns_1'
 	option alias 'cloudflare_dns_1'
