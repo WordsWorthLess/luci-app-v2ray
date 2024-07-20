@@ -17,6 +17,10 @@ LUCI_DEPENDS:=+jshn +ip +nftables-json +kmod-nft-socket +kmod-nft-tproxy \
 	+resolveip +dnsmasq-full +curl +coreutils-base64
 LUCI_PKGARCH:=all
 
+define Package/
+USERID:luci_app_v2ray:luci_app_v2ray
+endef
+
 define Package/$(PKG_NAME)/conffiles
 /etc/config/v2ray
 /etc/v2ray/transport.json
