@@ -7,13 +7,17 @@
 START=99
 USE_PROCD=1
 
+
 NAME=v2ray
+V2RAY_GID=$(id -g luci_app_v2ray)
 CONFIG_FOLDER=/var/etc/$NAME
 
 FILE_V2RAY_DNSMASQ=/tmp/dnsmasq.d/$NAME
 FILE_V2RAY_DNSMASQ_CACHE=/tmp/$NAME.dnsmasq.cache
 FILE_V2RAY_CHNROUTE=/var/etc/v2ray/chnroute.txt
 FILE_V2RAY_CHNROUTE6=/var/etc/v2ray/chnroute6.txt
+HY2_ENABLED=0
+HY2_TOML=$CONFIG_FOLDER/hysteria2.toml
 
 CORE=
 CORE_VER=
@@ -35,6 +39,9 @@ IPSET_DST_DIRECT_V6=v2ray_dst_direct_v6
 
 OUTBOUND_SERVERS_V4=
 OUTBOUND_SERVERS_V6=
+WAN_IPV4=
+WAN_IPV6=
+LAN_PREFIX6=
 
 FAKEDNS_ENABLED=0
 
@@ -48,6 +55,7 @@ EXCLUDED_UDP_PORT=
 DNSMASQ_RESTART_EXPECTED=0
 
 . /usr/share/libubox/jshn.sh
+. /lib/functions/network.sh
 
 _log() {
 	local level="$1" ; shift
@@ -64,6 +72,68 @@ _info() {
 _err() {
 	_log "err" $@
 }
+
+get_wan_ipv4() {
+	local if_wan
+	local wan_ipaddr
+	network_find_wan if_wan
+	if [ -n "$if_wan" ] ; then
+		network_get_ipaddr wan_ipaddr "$if_wan"
+		if [ -n "$wan_ipaddr" ] ; then
+			local wip
+			for wip in $wan_ipaddr ; do
+				WAN_IPV4="$(cat >&1 <<-EOF
+					$WAN_IPV4
+					$wip
+				EOF
+				)"
+			done
+		else
+			return
+		fi
+	else
+		return
+	fi
+}
+
+get_wan_ipv6() {
+	local if_wan6
+	local wan_ipaddr6
+	network_find_wan6 if_wan6
+	if [ -n "$if_wan6" ] ; then
+		network_get_ipaddr6 wan_ipaddr6 "$if_wan6"
+		if [ -n "$wan_ipaddr6" ] ; then
+			local wip
+			for wip in $wan_ipaddr6 ; do
+				WAN_IPV6="$(cat >&1 <<-EOF
+					$WAN_IPV6
+					$wip
+				EOF
+				)"
+			done
+		else
+			return
+		fi
+	else
+		return
+	fi
+}
+
+get_lan_prefix6() {
+	local lan_iface=$1
+	local lan_pfx6
+	network_get_prefix_assignments6 lan_pfx6 "$lan_iface"
+	test -n "$lan_pfx6" || return
+	local lpx
+	for lpx in $lan_pfx6 ; do
+		LAN_PREFIX6="$(cat >&1 <<-EOF
+			$LAN_PREFIX6
+			$lpx
+		EOF
+		)"
+	done
+}
+		
 
 get_value_from_json() {
 	local json="$1"
@@ -149,12 +219,10 @@ append_server_address() {
 	local addr="$1"
 
 	test -n "$addr" || return
-
 	local ipv4
 	for ipv4 in $(resolveip -4 -t 5 "$addr") ; do
 		append_server_ipv4 "$ipv4"
 	done
-
 	local ipv6
 	for ipv6 in $(resolveip -6 -t 5 "$addr") ; do
 		append_server_ipv6 "$ipv6"
@@ -165,6 +233,7 @@ v2ray_section_validate() {
 	uci_validate_section "$NAME" "v2ray" "$1" \
 		'enabled:bool:0' \
 		'v2ray_file:string' \
+		'hy2_file:string' \
 		'asset_location:directory' \
 		'mem_percentage:and(uinteger, max(100)):80' \
 		'config_file:file' \
@@ -188,7 +257,14 @@ dns_section_validate() {
 		'disable_fallback_if_match:bool:0' \
 		'fakedns_enabled:bool:0' \
 		'hosts:list(string)' \
-		'servers:list(uci("v2ray", "@dns_server"))'
+		'servers:list(uci("v2ray", "@dns_server"))' \
+		'host_override:list(uci("v2ray", "@host_mapping"))'
+}
+
+host_mapping_section_validate() {
+	uci_validate_section "$NAME" "host_mapping" "$1" \
+		'host_domain:string' \
+		'host_ip:string'
 }
 
 dns_server_section_validate() {
@@ -201,6 +277,7 @@ dns_server_section_validate() {
 		'domains:list(string)' \
 		'expect_ips:list(string)' \
 		'skip_fallback:bool' \
+		'server_query_strategy:or("UseIP", "UseIPv4", "UseIPv6")' \
 		'client_ip:ipaddr'
 }
 
@@ -350,7 +427,8 @@ inbound_section_validate() {
 		'sniffing_enabled:bool:0' \
 		'sniffing_dest_override:list(or("fakedns", "http", "tls", "quic", "fakedns+others"))' \
 		'metadata_only:bool:0' \
-		'domains_excluded:list(hostname)' \
+		'domains_excluded:string' \
+		'exclude_mijia_cloud:bool:0' \
 		'metadata_only:bool:0' \
 		'allocate_strategy:or("always", "random")' \
 		'allocate_refresh:uinteger' \
@@ -359,7 +437,7 @@ inbound_section_validate() {
 
 outbound_section_validate() {
 	uci_validate_section "$NAME" "outbound" "$1" \
-		'send_through:ipaddr' \
+		'send_through:string' \
 		'protocol:string' \
 		'tag:string' \
 		's_blackhole_reponse_type:or("none", "http")' \
@@ -368,7 +446,7 @@ outbound_section_validate() {
 		's_dns_port:port' \
 		's_dns_user_level:uinteger' \
 		's_dns_non_ip_query:or("", "drop", "skip")' \
-		's_freedom_domain_strategy:or("AsIs", "UseIP", "UseIPv4", "UseIPv6")' \
+		's_freedom_domain_strategy:string' \
 		's_freedom_redirect:string' \
 		's_freedom_fragment_length:string' \
 		's_freedom_fragment_interval:string' \
@@ -379,6 +457,24 @@ outbound_section_validate() {
 		's_http_account_user:string' \
 		's_http_account_pass:string' \
 		's_http_headers:list(string)' \
+		's_hysteria2_address:ipaddr' \
+		's_hysteria2_port:port' \
+		's_hysteria2_auth:string' \
+		's_hysteria2_tls_sni:host' \
+		's_hysteria2_tls_insecure:string' \
+		's_hysteria2_tls_pinsha256:string' \
+		's_hysteria2_tls_ca:file' \
+		's_hysteria2_domain_strategy:or("AsIs", "UseIP", "UseIPv4", "UseIPv6")' \
+		's_hysteria2_udp_hopinterval:uinteger' \
+		's_hysteria2_quic_initStreamRW:uinteger' \
+		's_hysteria2_quic_maxStreamRW:uinteger' \
+		's_hysteria2_quic_initConnRW:uinteger' \
+		's_hysteria2_quic_maxConnRW:uinteger' \
+		's_hysteria2_quic_maxIdleTO:uinteger' \
+		's_hysteria2_quic_keepalive:uinteger' \
+		's_hysteria2_quic_disableMTU:string' \
+		's_hysteria2_bw_up:and(uinteger, min(10), max(1000))' \
+		's_hysteria2_bw_down:and(uinteger, min(10), max(1000))' \
 		's_loopback_inboundtag:string' \
 		's_shadowsocks_email:string' \
 		's_shadowsocks_address:host' \
@@ -414,8 +510,9 @@ outbound_section_validate() {
 		's_wireguard_keep_alive:uinteger' \
 		's_wireguard_endpoint:string' \
 		's_wireguard_mtu:and(uinteger, min(1280), max(1420))' \
+		's_wireguard_kernel_mode:bool:0' \
 		's_wireguard_reserved_bytes:string' \
-		'ss_network:or("tcp", "kcp", "grpc", "ws", "h2", "domainsocket", "quic")' \
+		'ss_network:or("tcp", "kcp", "grpc", "ws", "h2", "domainsocket", "quic", "httpupgrade")' \
 		'ss_security:or("none", "tls", "xtls", "reality")' \
 		's_xtls_flow:or("","xtls-rprx-direct", "xtls-rprx-direct-udp443", "xtls-rprx-origin", "xtls-rprx-origin-udp443", "xtls-rprx-splice", "xtls-rprx-splice-udp443", "xtls-rprx-vision", "xtls-rprx-vision-udp443")' \
 		'ss_reality_public_key:string' \
@@ -451,19 +548,25 @@ outbound_section_validate() {
 		'ss_kcp_header_type:or("none", "srtp", "utp", "wechat-video", "dtls", "wireguard")' \
 		'ss_websocket_path:string' \
 		'ss_websocket_headers:hostname' \
+		'ss_grpc_authority:hostname' \
 		'ss_grpc_service_name:string' \
 		'ss_grpc_multi_mode:bool:0' \
+		'ss_grpc_user_agent:string' \
 		'ss_grpc_permit_without_stream:bool:0' \
 		'ss_grpc_idle_timeout:and(min(10), uinteger)' \
 		'ss_grpc_health_check_timeout:and(min(10), uinteger)' \
 		'ss_grpc_initial_windows_size:and(min(0), max(524288))' \
 		'ss_http_host:list(host)' \
 		'ss_http_path:string' \
+		'ss_httpupgrade_accept_proxy_protocol:bool:0' \
+		'ss_httpupgrade_host:string(host)' \
+		'ss_httpupgrade_path:string' \
 		'ss_domainsocket_path:string' \
 		'ss_quic_security:or("aes-128-gcm", "chacha20-poly1305", "none")' \
 		'ss_quic_key:string' \
 		'ss_quic_header_type:or("none", "srtp", "utp", "wechat-video", "dtls", "wireguard")' \
 		'ss_sockopt_mark:uinteger' \
+		'ss_sockopt_iface:string' \
 		'ss_sockopt_tcp_no_dellay:bool:0' \
 		'ss_sockopt_tcp_congestion:string' \
 		'ss_sockopt_dialer_proxy:string' \
@@ -507,7 +610,7 @@ add_v2ray_iptables_redirect_rules() {
 	$iptables_restore --noflush <<-EOF 2>/dev/null
 			*nat
 			:V2RAY -
-			-A V2RAY -p tcp -j RETURN -m mark --mark 0xff
+			-A V2RAY -j RETURN -m owner --gid-owner $V2RAY_GID
 			$(
 				if [ "$FAKEDNS_ENABLED" = "1" ] ; then
 					echo "-A V2RAY -p tcp -d $fakedns_pool -j REDIRECT --to-ports $port"
@@ -542,12 +645,13 @@ add_v2ray_iptables_redirect_rules() {
 		if [ -n "$addition" ] ; then
 			
 			ip -${inet_family} rule add fwmark 1 table 100
+			ip -${inet_family} rule add fwmark 2 table 100
 			ip -${inet_family} route add local default dev lo table 100 2>/dev/null
 		
 			$iptables_restore --noflush<<-EOF 2>/dev/null
 				*mangle
 				:V2RAY -
-				-A V2RAY -p udp -j RETURN -m mark --mark 0xff
+				-A V2RAY -j RETURN -m owner --gid-owner $V2RAY_GID
 				$(
 					if [ -n "$lan_ipaddrs" ] ; then
 						if [ "$proxy_mode" != "gfwlist_proxy" ] ; then
@@ -583,7 +687,7 @@ add_v2ray_iptables_redirect_rules() {
 					fi
 				)
 				:V2RAY_OUTPUT -
-				-A V2RAY_OUTPUT -p udp -j RETURN -m mark --mark 0xff
+				-A V2RAY_OUTPUT -j RETURN -m owner --gid-owner $V2RAY_GID
 				-A V2RAY_OUTPUT -p udp --dport 53 -j MARK --set-mark 1
 				$(
 					if [ "$FAKEDNS_ENABLED" = "1" ] ; then
@@ -650,7 +754,7 @@ add_v2ray_nftables_redirect_rules() {
 						done
 					fi
 				)
-				meta l4proto tcp mark 0xff counter accept
+				meta skgid $V2RAY_GID counter accept
 				$(
 					if [ "$FAKEDNS_ENABLED" = "1" ] ; then
 						echo -e "ip daddr 192.18.0.0/15 meta l4proto tcp counter redirect to :$port\n \
@@ -675,9 +779,11 @@ add_v2ray_nftables_redirect_rules() {
 	EOF
 	if [ -n "$addition" ] ; then
 		ip rule add fwmark 1 table 100
+		ip rule add fwmark 2 table 100
 		ip route add local default dev lo table 100
 		if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
 			ip -6 rule add fwmark 1 table 100
+			ip -6 rule add fwmark 2 table 100
 			ip -6 route add local default dev lo table 100
 		fi
 		$NFT_BIN -f - <<-EOF >/dev/null
@@ -698,13 +804,15 @@ add_v2ray_nftables_redirect_rules() {
 					)
 				}
 				chain v2ray_udp_rules {
-					meta mark 0xff counter accept
+					meta skgid $V2RAY_GID counter accept
+					meta nfproto ipv4 fib daddr type != local udp dport 53 counter tproxy ip to :$port meta mark set 1
+					meta nfproto ipv6 fib daddr type != local udp dport 53 counter tproxy ip6 to :$port meta mark set 1
 					$(
 						if [ -n "$lan_ipaddrs" ] ; then
 							if [ "$proxy_mode" != "gfwlist_proxy" ] ; then
 								local ipaddr
 								for ipaddr in $lan_ipaddrs ; do
-									echo "ip daddr $ipaddr udp dport 53 counter tproxy ip to :$port meta mark set 1"
+									echo "ip daddr $ipaddr udp dport 53 counter accept"
 								done
 							fi
 						fi
@@ -713,13 +821,13 @@ add_v2ray_nftables_redirect_rules() {
 								if [ "$proxy_mode" != "gfwlist_proxy" ] ; then
 									local ip6adr
 									for ip6addr in $lan_ip6addrs ; do
-										echo "ip6 daddr $ip6addr udp dport 53 counter tproxy ip6 to :$port meta mark set 1"
+										echo "ip6 daddr $ip6addr udp dport 53 counter accept"
 									done
 								fi
 							fi
-							echo "ip6 saddr ::1 udp dport 53 counter tproxy ip6 to :$port meta mark set 1"
+							echo "ip6 saddr ::1 udp dport 53 counter accept"
 						fi
-						echo "ip saddr 127.0.0.1 udp dport 53 counter tproxy ip to :$port meta mark set 1"
+						echo "ip saddr 127.0.0.1 udp dport 53 counter accept"
 
 						if [ "$FAKEDNS_ENABLED" = "1" ] ; then
 							echo -e "ip daddr 192.18.0.0/15 meta l4proto udp counter tproxy ip to :$port meta mark set 1\n \
@@ -742,8 +850,8 @@ add_v2ray_nftables_redirect_rules() {
 				}
 				chain udp_output {
 					type nat hook output priority filter; policy accept;
-					meta l4proto udp mark 0xff counter accept
-					udp dport 53 counter meta mark set 1
+					meta skgid $V2RAY_GID counter accept
+					meta skgid 453 udp dport 53 counter meta mark set 1
 					$(
 						if [ -n "$EXCLUDED_UDP_PORT" ] ; then
 							local eup
@@ -764,7 +872,7 @@ add_v2ray_nftables_redirect_rules() {
 						if [ "$addition" = "udp" ] ; then
 							echo "meta nfproto ipv4 udp $ext_args counter meta mark set 1"
 							if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
-								echo "meta nfproto iv6 udp $ext_args6 counter meta mark set 1"
+								echo "meta nfproto ipv6 udp $ext_args6 counter meta mark set 1"
 							fi
 						fi
 					)
@@ -806,6 +914,7 @@ add_v2ray_iptables_tproxy_rules() {
 
 	# https://www.kernel.org/doc/Documentation/networking/tproxy.txt
 	ip -${inet_family} rule add fwmark 1 table 100
+	ip -${inet_family} rule add fwmark 2 table 100
 	ip -${inet_family} route add local default dev lo table 100 2>/dev/null
 
 	$iptables_restore --noflush <<-EOF 2>/dev/null
@@ -816,7 +925,7 @@ add_v2ray_iptables_tproxy_rules() {
 		-A PREROUTING -p tcp -m socket -j V2RAY_DIVERT
 
 		:V2RAY -	
-		-A V2RAY -j RETURN -m mark --mark 0xff
+		-A V2RAY -j RETURN -m owner --gid-owner $V2RAY_GID
 		$(
 			if [ -n "$addition" ] && [ -n "$lan_ipaddrs" ] ; then
 				if [ "$proxy_mode" != "gfwlist_proxy" ] ; then
@@ -854,7 +963,7 @@ add_v2ray_iptables_tproxy_rules() {
 			fi
 		)
 		:V2RAY_OUTPUT -
-		-A V2RAY_OUTPUT -j RETURN -m mark --mark 0xff
+		-A V2RAY_OUTPUT -j RETURN -m owner --gid-owner $V2RAY_GID
 		$(
 			if [ -n "$addition" ] ; then
 				echo "-A V2RAY_OUTPUT -p udp --dport 53 -j MARK --set-mark 1"
@@ -906,10 +1015,21 @@ add_v2ray_nftables_tproxy_rules() {
 	test -n "$port" || return
 
 	ip rule add fwmark 1 table 100
+	ip rule add fwmark 2 table 100
 	ip route add local default dev lo table 100
 	if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
 		ip -6 rule add fwmark 1 table 100
+		ip -6 rule add fwmark 2 table 100
 		ip -6 route add local default dev lo table 100
+		if [ -n "$LAN_PREFIX6" ] && [ -n "$lan_devices" ] ; then
+			local lpx
+			for lpx in $LAN_PREFIX6 ; do
+				local dev
+				for dev in $lan_devices ; do
+					ip -6 route add $lpx dev $dev table 100
+				done
+			done
+		fi
 	fi
 
 	$NFT_BIN -f -<<-EOF
@@ -917,116 +1037,130 @@ add_v2ray_nftables_tproxy_rules() {
 		table inet $NAME {
 			chain divert { 
 				type filter hook prerouting priority mangle; policy accept; 
-				meta l4proto tcp socket transparent 1 counter meta mark set 1 accept
+				meta l4proto tcp socket transparent 1 counter meta mark set 1 accept comment "!v2ray: accept data from existing tcp socket"
 				$(
 					if [ -n "$lan_devices" ] ; then 
 						local device 
 						for device in $lan_devices ; do
-							echo "iifname $device counter jump v2ray_rules"
+							echo -e "iifname $device counter jump v2ray_rules comment \"!v2ray: proxy traffic from local only\""
 						done
 					fi
 				)
 				meta mark 1 counter jump v2ray_rules
+				$(	if [ "$HY2_ENABLED" = "1" ] ; then
+						echo "meta mark 2 counter jump hy2_rules"
+					fi
+				)
 			}
 			chain v2ray_rules {
-				meta mark 0xff counter return
+				
 				$(
 					if [ -n "$addition" ] ; then
+						echo "meta nfproto ipv4 udp dport 53 fib saddr type != local fib daddr type != local counter tproxy ip to :$port meta mark set 1"
+						echo "meta nfproto ipv6 udp dport 53 fib saddr type != local fib daddr type != local counter tproxy ip6 to :$port meta mark set 1"
 						if [ -n "$lan_ipaddrs" ] ; then
-							if [ "$proxy_mode" != "gfwlist_proxy" ] ; then
-								local ipaddr
-								for ipaddr in $lan_ipaddrs ; do
-									echo "ip daddr $ipaddr udp dport 53 counter tproxy ip to :$port meta mark set 1"
-								done
-							fi
+							local ipaddr
+							for ipaddr in $lan_ipaddrs ; do
+								echo -e "ip daddr $ipaddr udp dport 53 counter accept comment \"!v2ray: accept dns queries from LAN\""
+							done
 						fi
 						if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
 							if [ -n "$lan_ip6addrs" ] ; then
-								if [ "$proxy_mode" != "gfwlist_proxy" ] ; then
-									local ip6addr
-									for ip6addr in $lan_ip6addrs ; do
-										echo "ip6 daddr $ip6addr udp dport 53 counter tproxy ip6 to :$port meta mark set 1"
-									done
-								fi
+								local ip6addr
+								for ip6addr in $lan_ip6addrs ; do
+									echo -e "ip6 daddr $ip6addr udp dport 53 counter accept comment \"!v2ray: accept IPv6 dns queries from LAN\""
+								done
 							fi
 						fi
 					fi
-					echo "ip daddr 127.0.0.1 udp dport 53 counter tproxy ip to :$port meta mark set 1"
+					echo -e "ip daddr 127.0.0.1 udp dport 53 counter accept comment \"!v2ray: accept dns query from localhost\""
 					if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
-						echo "ip6 daddr ::1 udp dport 53 counter tproxy ip6 to :$port meta mark set 1"
+						echo "ip6 daddr ::1 udp dport 53 counter accept comment \"!v2ray: accept dns query from localhost(IPv6)\""
 					fi
 
 					if [ "$FAKEDNS_ENABLED" = "1" ] ; then
-						echo -e "ip daddr 192.18.0.0/15 meta l4proto { tcp, udp } tproxy ip to :$port meta mark set 1\n \
-							ip6 daddr fc00::/18 meta l4proto { tcp, udp } tproxy ip6 to :$port meta mark set 1"
+						echo -e "ip daddr 192.18.0.0/15 meta l4proto { tcp, udp } tproxy ip to :$port meta mark set 1 comment \"!v2ray: redirect fakeips to Transpparent Proxy\"\n \
+							ip6 daddr fc00::/18 meta l4proto { tcp, udp } tproxy ip6 to :$port meta mark set 1 comment \"!v2ray: redirect IPv6 fakeips to Transparent Proxy\""
 					fi
 				)
-				ip daddr @$IPSET_DST_DIRECT_V4 counter return
-				ip saddr @$IPSET_SRC_DIRECT_V4 counter return
-				ip6 daddr @$IPSET_DST_DIRECT_V6 counter return
-				meta nfproto ipv4 tcp $ext_args counter tproxy ip to :$port meta mark set 1
+				ip daddr @$IPSET_DST_DIRECT_V4 counter return comment "!v2ray: do not proxy traffic to 'direct-out' destination IPv4 addresses"
+				ip saddr @$IPSET_SRC_DIRECT_V4 counter return comment "!v2ray: do not proxy traffic from  'direct-out' source IPv4 addresses"
+				ip6 daddr @$IPSET_DST_DIRECT_V6 counter return comment "!v2ray: do not proxy traffic to 'direct-out' destination IPv6 addresses"
+				meta nfproto ipv4 tcp $ext_args counter tproxy ip to :$port meta mark set 1 comment "!v2ray: redirect IPv4 tcp traffic to Transparent Proxy"
 				$(
 					if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
-						echo "meta nfproto ipv6 tcp $ext_args6 counter tproxy ip6 to :$port meta mark set 1"
+						echo -e "meta nfproto ipv6 tcp $ext_args6 counter tproxy ip6 to :$port meta mark set 1 comment \"!v2ray: redirect IPv6 tcp traffic to Transparent Proxy\""
 					fi
 				)
 				
 				$(    	
 					if [ "$addition" = "udp" ] ; then
-						echo "meta nfproto ipv4 udp $ext_args counter tproxy ip to :$port meta mark set 1"
+						echo -e "meta nfproto ipv4 udp $ext_args counter tproxy ip to :$port meta mark set 1 comment \"!v2ray: redirect IPv4 udp traffic to Transparent Proxy\""
 						if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
-							echo "meta nfproto ipv6 udp $ext_args6 counter tproxy ip6 to :$port meta mark set 1"
+							echo -e "meta nfproto ipv6 udp $ext_args6 counter tproxy ip6 to :$port meta mark set 1 comment \"!v2ray: redirect IPv6 udp traffic to Transparent Proxy\""
 						fi
 					fi
 				)
 			}
 			chain v2ray_output { 
-				type route hook output priority mangle; policy accept; 
-				meta mark 0xff counter accept
+				type route hook output priority mangle; policy accept;
+				$(
+					if [ "$HY2_ENABLED" = "1" ] ; then
+						echo "meta mark 51082 counter meta mark set 2 accept"
+					fi
+				)
+				meta skgid $V2RAY_GID counter return comment "!v2ray: accept traffic from Transparent Proxy"
 				$(
 					if [ -n "$addition" ] ; then
-						echo -e "udp dport 53 counter meta mark set 1"
+						echo -e "udp dport 53 counter meta mark set 1 comment\"!v2ray: re-route all dns queries\""
 					fi
 
 					if  [ -n "$EXCLUDED_TCP_PORT" ] ; then
 						local etp
 						for etp in $EXCLUDED_TCP_PORT ; do
-							echo "tcp sport $etp counter accept"
+							echo -e "tcp sport $etp counter return comment\"!v2ray: accept traffic from excluded tcp ports\"" 
 						done
 					fi
 
 					if [ -n "$EXCLUDED_UDP_PORT" ] ; then
 						local eup
 						for eup in $EXCLUDED_UDP_PORT ; do
-							echo "udp sport $eup counter accept"
+							echo -e "udp sport $eup counter return comment\"!v2ray: accept traffic from excluded udp ports\""
 						done
 					fi
 				)
 				$(
 					if [ "$FAKEDNS_ENABLED" = "1" ] ; then
-						echo -e "ip daddr 192.18.0.0/15 counter meta l4proto { tcp, udp } mark set 1\n \
-							ip6 daddr fc00::/18 counter meta l4proto { tcp, udp } mark set 1" 
+						echo -e "ip daddr 192.18.0.0/15 counter meta l4proto { tcp, udp } mark set 1 comment \"!v2ray: re-route traffic to IPv4 fakeips\"\n \
+							ip6 daddr fc00::/18 counter meta l4proto { tcp, udp } mark set 1 comment\"!v2ray: re-route traffic to IPv6 fakeips\"" 
 					fi 
 				)
-				ip daddr @$IPSET_DST_DIRECT_V4 counter accept
-				ip saddr @$IPSET_SRC_DIRECT_V4 counter accept
-				ip6 daddr @$IPSET_DST_DIRECT_V6 counter accept
-				meta nfproto ipv4 tcp $ext_args counter meta mark set 1
+				ip daddr @$IPSET_DST_DIRECT_V4 counter accept comment "!v2ray: do not proxy traffic to 'direct-out' destination IPv4 addresses"
+				ip saddr @$IPSET_SRC_DIRECT_V4 counter accept comment "!v2ray: do not proxy traffic from  'direct-out' source IPv4 addresses"
+				ip6 daddr @$IPSET_DST_DIRECT_V6 counter accept comment "!v2ray: do not proxy traffic to 'direct-out' destination IPv6 addresses"
+				meta nfproto ipv4 tcp $ext_args counter meta mark set 1 comment "!v2ray: re-route IPv4 tcp traffic"
 				$(
 					if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
-						echo "meta nfproto ipv6 tcp $ext_args6 counter meta mark set 1"
+						echo -e "meta nfproto ipv6 tcp $ext_args6 counter meta mark set 1 comment \"!v2ray: re-route IPv6 tcp traffic\""
 					fi
 				
 					if [ "$addition" = "udp" ] ; then
 
-						echo "meta nfproto ipv4 udp $ext_args" counter meta mark set 1
+						echo -e "meta nfproto ipv4 udp $ext_args counter meta mark set 1 comment \"!v2ray: re-route IPv4 udp traffic\""
 
 						if [ "x$TRANSPARENT_PROXY_IPV6" = "x1" ] ; then
-							echo "meta nfproto ipv6 udp $ext_args6 counter meta mark set 1"
+							echo -e "meta nfproto ipv6 udp $ext_args6 counter meta mark set 1 comment \"!v2ray: re-route IPv6 udp traffic\""
 						fi
 					fi
 				)
 			}
+			$(
+				if [ "$HY2_ENABLED" = "1" ] ; then
+					echo -e	"chain hy2_rules { \nmeta nfproto ipv4 meta l4proto { tcp, udp } counter tproxy ip to :51082 meta mark set 1\n \
+						meta nfproto ipv6 meta l4proto { tcp, udp } counter tproxy ip6 to :51082 meta mark set 1\n}"
+				fi
+			)
+				
 		}
 	EOF
 }
@@ -1037,8 +1171,10 @@ clear_v2ray_rules() {
 	destroy_v2ray_ipset
 	$NFT_BIN delete table inet v2ray 2>/dev/null 
 	while ip rule del fwmark 1 lookup 100 2>/dev/null ; do true ; done
+	while ip rule del fwmark 2 lookup 100 2>/dev/null ; do true ; done
 	while ip -6 rule del fwmark 1 lookup 100 2>/dev/null ; do true ; done
-	ip route flush table 100
+	while ip -6 rule del fwmark 2 lookup 100 2>/dev/null ; do true ; done
+	ip route flush table 100 2>/dev/null
 	ip -6 route flush table 100 2>/dev/null
 	ip route del local 0.0.0.0/0 dev lo table 100 2>/dev/null
 	ip -6 route del local ::/0 dev lo table 100 2>/dev/null
@@ -1088,8 +1224,6 @@ create_v2ray_ipset() {
 	local outbound_v6="$OUTBOUND_SERVERS_V6"
 	if [ -z $NFT_BIN ] ; then
 		ipset -! restore <<-EOF 2>/dev/null
-			create $IPSET_SRC_IGNORE_V4 hash:ip hashsize 64 family inet timeout 0
-			create $IPSET_SRC_IGNORE_V6 hash:ip hashsize 64 family inet6 timeout 0
 			create $IPSET_DST_PROXY_V4 hash:net hashsize 64 family inet timeout 604800
 			create $IPSET_DST_PROXY_V6 hash:net hashsize 64 family inet6 timeout 604800
 			create $IPSET_SRC_DIRECT_V4 hash:net hashsize 64 family inet timeout 0
@@ -1101,12 +1235,13 @@ create_v2ray_ipset() {
 			$(echo "$outbound_v6" | grep -v "^$" | sed "s/.*/add $IPSET_DST_DIRECT_V6 & timeout 0/")
 		EOF
 	else
-		$NFT_BIN  -f -<<-EOF 
+		$NFT_BIN -f -<<-EOF 
 			#!$NFT_BIN -f
 			table inet $NAME {
 				set $IPSET_DST_DIRECT_V4 { 
 					type ipv4_addr
 					flags interval
+					auto-merge
 					elements = { 
 					$(
 						if [ -z "$outbound_v4" ] ; then
@@ -1120,15 +1255,18 @@ create_v2ray_ipset() {
 				} 
 				set $IPSET_SRC_DIRECT_V4 { 
 					type ipv4_addr
-					flags interval 
+					flags interval
+					auto-merge 
 				}
 				set $IPSET_DST_PROXY_V4 {
 					type ipv4_addr
 					flags interval
+					auto-merge
 				}
 				set $IPSET_DST_DIRECT_V6 { 
 					type ipv6_addr
 					flags interval
+					auto-merge
 					elements = { 
 					$(
 						if [ -z "$outbound_v6" ] ; then
@@ -1143,9 +1281,24 @@ create_v2ray_ipset() {
 				set $IPSET_DST_PROXY_V6 {
 					type ipv6_addr
 					flags interval
+					auto-merge
 				}
 			}
 		EOF
+		if [ -n "$WAN_IPV4" ] ; then
+			local wip
+			for wip in $WAN_IPV4 ; do
+				nft add element inet $NAME $IPSET_DST_DIRECT_V4 \{ $wip \} 2>/dev/null
+			done
+		fi
+		if [ -n "$WAN_IPV6" ] ; then
+			local wip
+			for wip in $WAN_IPV6 ; do
+				nft add element inet $NAME $IPSET_DST_DIRECT_V6 \{ $wip \} 2>/dev/null
+			done
+		fi
+		
+		
 	fi
 
 }
@@ -1201,11 +1354,9 @@ init_rules_for_listfile() {
 	# For proxy list
 	local proxy_content
 	local proxy_dns
-	test -n $proxy_list_dns && \
-		proxy_dns=$(echo $proxy_list_dns | sed 's/#53//' 2>/dev/null)
 	proxy_content="$(get_file_content "proxylist")"
 	if [ -n "$proxy_content" ] ; then
-		echo $proxy_dns >> $proxy_content
+		proxy_content="$proxy_content"$(echo -e "\n$proxy_list_dns" | sed 's/#[0-9]\{1,5\}//')
 		if [ -z "$NFT_BIN" ] ; then
 			echo "$proxy_content" | \
 				grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}(/[0-9]{1,2})?" | \
@@ -1242,14 +1393,14 @@ init_rules_for_listfile() {
 			if [ "$NFT_SET" = "1" ] ; then
 				if [ -n "$proxy_list_dns" ] ; then
 					echo "$proxy_content" | \
-						grep -oE "([0-9a-zA-Z_-]+\.)+[a-zA-Z]{2,}$" | \
+						grep -oE "([0-9a-zA-Z_-]+\.)+[a-zA-Z]{2,}$"  | \
 						sed "s|.*|server=/&/$proxy_list_dns\nnftset=/&/inet#v2ray#$IPSET_DST_PROXY_V4,inet#v2ray#$IPSET_DST_PROXY_V6|" \
 						>>"$FILE_V2RAY_DNSMASQ_CACHE"
 				else
 					echo "$proxy_content" | \
 						grep -oE "([0-9a-zA-Z_-]+\.)+[a-zA-Z]{2,}$" | \
 						sed "s|.*|nftset=/&/inet#v2ray#$IPSET_DST_PROXY_V4,inet#v2ray#$IPSET_DST_PROXY_V6|" \
-						>>"$FILE_V2RAY_DNSMASQ_CACHE"
+						>>"$FILE_V2RAY_DNSMASQ_CACHE" 
 				fi
 			fi
 		fi
@@ -1299,30 +1450,17 @@ add_dns_settings() {
 
 	test -n "$tag" && \
 		json_add_string "tag" "$tag"
-#	test -n "$client_ip" && \
-#		json_add_string "clientIp" "$client_ip"
-	if [ -n "$hosts" ] ; then
+	if [ -n "$host_override" ] ; then
 		json_add_object "hosts"
-
-		local h
-		for h in $hosts ; do
-			local domain="$(echo "$h" | cut -d'|' -f1)"
-			local ip_arr
-			local OLD_IFS="$IFS"
-			IFS="," 
-			ip_arr="$(echo "$h" | cut -d'|' -f2)"
-	
-			if [ -n "$domain" ] && [ -n "$ip_arr" ] ; then
-				json_add_array "$domain"
-				local ip
-				for ip in $ip_arr ; do
-					json_add_string "" "$ip"
+		for hm in $host_override ; do
+			if host_mapping_section_validate "$hm" ; then
+				json_add_array "$host_domain"
+				for hi in $host_ip ; do
+					json_add_string "" "$hi"
 				done
 				json_close_array
 			fi
-			IFS="$OLD_IFS"
 		done
-
 		json_close_object # hosts
 	fi
 
@@ -1363,7 +1501,7 @@ add_dns_settings() {
 				esac
 
 			if [ "x$FAKEDNS_ENABLED" = "x0" ] ; then
-				if [ -n "${domains}${expect_ips}${client_ip}${skip_fallback}" ] ; then
+				if [ -n "${domains}${expect_ips}${client_ip}${skip_fallback}${server_query_strategy}" ] ; then
 					json_add_object 
 					address_key="address"
 				fi
@@ -1408,13 +1546,14 @@ add_dns_settings() {
 				fi
 				test -n "$skip_fallback" &&	json_add_boolean "skipFallback" "$skip_fallback"
 				test -n "$client_ip" && json_add_string "clientIp" "$client_ip"
+				test -n "$server_query_strategy" && json_add_string "queryStrategy" "$server_query_strategy"
 				if [ -n "${domains}${expect_ips}${client_ip}${skip_fallback}" ] ; then
 					json_close_object
 				fi
 			else
 				case "${dns_server_type}" in
 					"DoH"|"localhost"|"QUIC"|"TCP"|"UDP")
-						if [ -n "${domains}${expect_ips}${client_ip}${skip_fallback}" ] ; then
+						if [ -n "${domains}${expect_ips}${client_ip}${skip_fallback}${server_query_strategy}" ] ; then
 							json_add_object 
 							address_key="address"
 						fi
@@ -1452,6 +1591,7 @@ add_dns_settings() {
 							json_close_array # expectIPs
 						fi
 						test -n "$skip_fallback" &&	json_add_boolean "skipFallback" "$skip_fallback"
+						test -n "$server_query_strategy" && json_add_string "queryStrategy" "$server_query_strategy"
 						test -n "$client_ip" && json_add_string "clientIp" "$client_ip"
 						if [ -n "${domains}${expect_ips}${client_ip}${skip_fallback}" ] ; then
 							json_close_object
@@ -1468,7 +1608,7 @@ add_dns_settings() {
 	json_close_array # servers
 	fi
 	test -n "$default_client_ip" && json_add_string "clientIp" "$default_client_ip"
-	json_add_string "queryStrategy" "$query_strategy"
+	test -n "$query_strategy" && json_add_string "queryStrategy" "$query_strategy"
 	json_add_boolean "disableCache" "$disable_cache"
 	json_add_boolean "disableFallback" "$disable_fallback"
 	json_add_boolean "disableFallbackIfMatch" "$disable_fallback_if_match"
@@ -2086,7 +2226,8 @@ add_inbound_setting() {
 			;;
 		"grpc")
 			json_add_object "grpcSettings"
-
+			test -n "$ss_grpc_authority" && \
+				json_add_string "authority" "$ss_grpc_authority"
 			test -n "$ss_grpc_service_name" && \
 				json_add_string "serviceName" "$ss_grpc_service_name"
 			json_add_boolean "multiMode" "$ss_grpc_multi_mode"
@@ -2175,49 +2316,60 @@ add_inbound_setting() {
 	json_add_object "sniffing"
 
 	json_add_boolean "enabled" "$sniffing_enabled"
-	if [ -n "$sniffing_dest_override" ] ; then
-		json_add_array "destOverride"
-		if [ "x$FAKEDNS_ENABLED" = "x1" ] ; then
-			if [ "x$metadata_only" = "x1" ] ; then
-				local d
-				for d in $sniffing_dest_override ; do
-					if [ "$d" = "fakedns" ] ; then
+	if [ "x$sniffing_enabled" = "x1" ] ; then
+		if [ -n "$sniffing_dest_override" ] ; then
+			json_add_array "destOverride"
+			if [ "x$FAKEDNS_ENABLED" = "x1" ] ; then
+				if [ "x$metadata_only" = "x1" ] ; then
+					local d
+					for d in $sniffing_dest_override ; do
+						if [ "$d" = "fakedns" ] ; then
+							json_add_string "" "$d"
+						fi
+					done
+				else
+					local d
+					for d in $sniffing_dest_override ; do
 						json_add_string "" "$d"
-					fi
-				done
+					done
+				fi
+				json_close_array
+				json_add_boolean "metadataOnly" "$metadata_only"
 			else
 				local d
 				for d in $sniffing_dest_override ; do
 					json_add_string "" "$d"
 				done
+				json_close_array
+				json_add_boolean "metadataOnly" "$metadata_only"
 			fi
-			json_close_array
-			json_add_boolean "metadataOnly" "$metadata_only"
-		else
-			local d
-			for d in $sniffing_dest_override ; do
-				json_add_string "" "$d"
-			done
-			json_close_array
-			json_add_boolean "metadataOnly" "$metadata_only"
-		fi
 		
 		
 #		json_close_array # destOverride
 		
-	fi
-	if [ -n "$domains_excluded" ] ; then
-		json_add_array "domainsExcluded"
-		local de
-		for de in $domains_excluded ; do
-			json_add_string "" "$de"
-		done
-		json_close_array
-	fi
+		fi
+		if [ -n "$domains_excluded" ] ; then
+			json_add_array "domainsExcluded"
+			local de
+			for de in $domains_excluded ; do
+				json_add_string "" "$de"
+			done
+			if [ "x$exclude_mijia_cloud" = "x1" ] ; then
+				json_add_string "" "Mijia Cloud"
+			fi
+			json_close_array
+		else
+			if [ "x$exclude_mijia_cloud" = "x1" ] ; then
+				json_add_array "domainsExcluded"
+				json_add_string "" "Mijia Cloud"
+				json_close_array
+			fi
+		fi
 
-	json_add_boolean "routeOnly" "$route_only"
+		json_add_boolean "routeOnly" "$route_only"
 
-	json_close_object # sniffing
+	fi
+	json_close_object
 
 	if [ -n "$allocate_strategy" ] ; then
 		json_add_object "allocate"
@@ -2244,12 +2396,28 @@ add_outbound_setting() {
 	
 	test -n "$tag" && json_add_string "tag" "$tag"
 
-	test -n "$send_through" && \
-		json_add_string "sendThrough" "$send_through"
-	json_add_string "protocol" "$protocol"
+	if [ -n "$send_through" ] ; then
+		local send_through_ipv4
+		local send_through_ipv6
+		network_get_ipaddr send_through_ipv4 $send_through
+		network_get_ipaddr6 send_through_ipv6 $send_through
+		if [ -n "$send_through_ipv4" ] ; then
+			json_add_string "sendThrough" "$send_through_ipv4"
+		else
+			test -n "$send_through_ipv6" && json_add_string "sendThrough" "$send_through_ipv6"
+		fi
+		
+#		echo -e "#!/bin/sh\nif [ \"\${ACTION}\" = \"ifupdate\" ] && [ \"\${INTERFACE}\" = \"$send_through\" ] ; then\n /etc/init.d/v2ray reload\nfi" > /etc/hotplug.d/iface/99-v2ray-$tag
+
+#	else
+#		test -s "/etc/hotplug.d/iface/99-v2ray-$tag" && rm /etc/hotplug.d/iface/99-v2ray-$tag
+	fi
+
+			json_add_string "protocol" "$protocol"
 
 	case "${protocol:-x}" in
 		"blackhole")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 
 			if [ -n "$s_blackhole_reponse_type" ] ; then
@@ -2261,6 +2429,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"dns")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 
 			test -n "$s_dns_network" && \
@@ -2268,7 +2437,7 @@ add_outbound_setting() {
 
 			if [ -n "$s_dns_address" ] ; then
 				json_add_string "address" "$s_dns_address"
-				append_server_address "$s_dns_address"
+			#	append_server_address "$s_dns_address"
 			fi
 
 			test -n "$s_dns_port" && \
@@ -2280,6 +2449,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"freedom")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 
 			test -n "$s_freedom_domain_strategy" && \
@@ -2300,6 +2470,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"http")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			json_add_array "servers"
 
@@ -2344,6 +2515,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"loopback")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			
 			if [ -n "$s_loopback_inboundtag" ] ; then
@@ -2352,10 +2524,12 @@ add_outbound_setting() {
 			json_close_object
 			;;
 		"mtproto")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			json_close_object
 			;;
 		"shadowsocks")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			json_add_array "servers"
 
@@ -2378,6 +2552,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"socks")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			json_add_array "servers"
 
@@ -2408,6 +2583,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"trojan")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			json_add_array "servers"
 			json_add_object ""
@@ -2448,6 +2624,7 @@ add_outbound_setting() {
  			json_close_object
         		;;
 		"vless")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 			json_add_array "vnext"
 			json_add_object ""
@@ -2496,6 +2673,7 @@ add_outbound_setting() {
 			json_close_object # settings
 			;;
 		"vmess")
+			json_add_string "protocol" "$protocol"
 			json_add_object "settings"
 
 			json_add_array "vnext"
@@ -2521,6 +2699,68 @@ add_outbound_setting() {
 
 			json_close_array # vnext
 			json_close_object # settings
+			;;
+		"hysteria2")
+			json_add_string "protocol" "freedom"
+			json_add_object "settings"
+			json_add_string "domainStrategy" "$s_hysteria2_domain_strategy"
+			json_close_object 
+			json_add_object "streamSettings"
+			json_add_object "sockopt"
+			json_add_int "mark" "51082"
+			json_close_object
+			json_close_object
+			echo -e "server = \"[$s_hysteria2_address]:$s_hysteria2_port\"" > $HY2_TOML 
+			echo -e "auth = \"$s_hysteria2_auth\"" >> $HY2_TOML
+			echo -e "[tls]\nsni = \"$s_hysteria2_tls_sni\"" >> $HY2_TOML
+			echo "insecure = $s_hysteria2_tls_insecure" >> $HY2_TOML
+			[ -n "$s_hysteria2_tls_pinsha256" ] && echo "pinSHA256 = \"$s_hysteria2_tls_pinsha256\"" >> $HY2_TOML
+			[ -n "$s_hysteria2_tls_ca" ] &&	 echo "ca = \"$s_hysteria2_tls_ca\"" >> $HY2_TOML
+			echo -e "[transport]\ntype = \"udp\"\n[transport.udp]" >> $HY2_TOML
+			if [ -n "$s_hysteria2_udp_hopinterval" ] ; then
+				echo "hopInterval = \"${s_hysteria2_udp_hopinterval}s\"" >> $HY2_TOML
+			else
+				echo 'hopInterval = "30s"' >> $HY2_TOML
+			fi
+			echo "[quic]" >> $HY2_TOML
+			if [ -n "$s_hysteria2_quic_initStreamRW" ] ; then
+				echo  "initStreamReceiveWindow = $s_hysteria2_quic_initStreamRW" >> $HY2_TOML
+			else
+				echo  "initStreamReceiveWindow = 8388608" >> $HY2_TOML
+			fi
+			if [ -n "$s_hysteria2_quic_maxStreamRW" ] ; then
+				echo  "maxStreamReceiveWindow = $s_hysteria2_quic_maxStreamRW" >> $HY2_TOML
+			else
+				echo  "maxStreamReceiveWindow = 8388608" >> $HY2_TOML
+			fi
+			if [ -n "$s_hysteria2_quic_initConnRW" ] ; then
+				echo  "initConnReceiveWindow = $s_hysteria2_quic_initConnRW" >> $HY2_TOML
+			else
+				echo  "initConnReceiveWindow = 20971520" >> $HY2_TOML
+			fi
+			if [ -n "$s_hysteria2_quic_maxConnRW" ] ; then
+				echo  "maxConnReceiveWindow = $s_hysteria2_quic_maxConnRW" >> $HY2_TOML
+			else
+				echo  "maxConnReceiveWindow = 20971520" >> $HY2_TOML
+			fi
+			if [ -n "$s_hysteria2_quic_maxIdleTO" ] ; then
+				echo  "maxIdleTimeout = \"${s_hysteria2_quic_maxIdleTO}s\"" >> $HY2_TOML
+			else
+				echo  'maxIdleTimeout = "30s"' >> $HY2_TOML
+			fi
+			if [ -n "$s_hysteria2_quic_keepalive" ] ; then
+				echo  "keepAlivePeriod = \"${s_hysteria2_quic_keepalive}s\"" >> $HY2_TOML
+			else
+				echo  'keepAlivePeriod = "10s"' >> $HY2_TOML
+			fi
+			echo  -e "disablePathMTUDiscovery = $s_hysteria2_quic_disableMTU\n[quic.sockopt]\nfwmark = 255" >> $HY2_TOML
+			if [ -n "$s_hysteria2_bw_up" ] && [ -n "$s_hysteria2_bw_down" ] ; then
+				echo -e "[bandwidth]\nup = \"${s_hysteria2_bw_up}mbps\"\ndown = \"${s_hysteria2_bw_down}mbps\"" >> $HY2_TOML
+			else
+				echo -e "[bandwidth]\nup = \"50mbps\"\ndown = \"100mbps\"" >> $HY2_TOML
+			fi
+			echo -e "[tcpTproxy]\nlisten = \":51082\"\n[udpTproxy]\nlisten = \":51082\"" >> $HY2_TOML
+			_info "Hysteria2 Tproxy listen on port 51082"
 			;;
 		"wireguard")
 			json_add_object "settings"
@@ -2553,6 +2793,7 @@ add_outbound_setting() {
 			json_close_array
 			test -n "$s_wireguard_mtu" && \
 				json_add_int "mtu" "$s_wireguard_mtu"
+			json_add_boolean "kernelMode" "$s_wireguard_kernel_mode"
 			if [ -n "$s_wireguard_reserved_bytes" ] ; then
 				json_add_array "reserved"
 				local OLD_IFS=$IFS
@@ -2567,7 +2808,7 @@ add_outbound_setting() {
 			json_close_object
 			;;
 	esac
-	if [ "$protocol" != "wireguard" ] ; then
+	if [ "$protocol" != "wireguard" ] && [ "$protocol" != "hysteria2" ] ; then
 	json_add_object "streamSettings"
 	test -n "$ss_network" && \
 		json_add_string "network" "$ss_network"
@@ -2779,10 +3020,13 @@ add_outbound_setting() {
 			;;
 		"grpc")
 			json_add_object "grpcSettings"
-
+			test -n "$ss_grpc_authority" && \
+				json_add_string "authority" "$ss_grpc_authority"
 			test -n "$ss_grpc_service_name" && \
 				json_add_string "serviceName" "$ss_grpc_service_name"
 			json_add_boolean "multiMode" "$ss_grpc_multi_mode"
+			test -n "$ss_grpc_user_agent" && \
+				json_add_string "user_agent" "$ss_grpc_user_agent"
 			json_add_boolean "permit_without_stream" "$ss_grpc_permit_without_stream"
 
 			if [ "x$ss_grpc_permit_without_stream" = "x1" ] ; then
@@ -2815,6 +3059,18 @@ add_outbound_setting() {
 				json_add_string "path" "$ss_http_path"
 
 			json_close_object # httpSettings
+			;;
+		"httpupgrade")
+			json_add_object "httpupgradeSettings"
+
+			json_add_boolean "acceptProxyProtocol" "$ss_httpupgrade_accept_proxy_protocol"
+
+			test -n "$ss_httpupgrade_host" && \
+				json_add_string "host" "$ss_httpupgrade_host"
+
+			test -n "$ss_httpupgrade_path" && \
+				json_add_string "path" "$ss_httpupgrade_path"
+			json_close_object
 			;;
 		"domainsocket")
 			json_add_object "dsSettings"
@@ -2862,10 +3118,19 @@ add_outbound_setting() {
 		json_add_string "tcpcongestion" "$ss_sockopt_tcp_congestion"
 
 	if [ -n "$TRANSPARENT_PROXY_PORT" ] ; then
-		json_add_int "mark" "255"
+		if [ "$ss_sockopt_mark" != "51082" ] ; then
+			json_add_int "mark" "255"
+		else
+			json_add_int "mark" "51082"
+		fi
 	else
 		test -n "$ss_sockopt_mark" && \
 			json_add_int "mark" "$ss_sockopt_mark"
+	fi
+	if [ -n "$ss_sockopt_iface" ] ; then
+		local ss_iface
+		network_get_device ss_iface "$ss_sockopt_iface"
+		test -n "$ss_iface" && json_add_string "interface" "$ss_iface"
 	fi
 
 	test -n "$ss_sockopt_tcp_fast_open" && \
@@ -2899,6 +3164,8 @@ init_transparent_proxy() {
 	local tp_cfg="main_transparent_proxy"
 	local redirect_port use_tproxy redirect_udp redirect_dns ipv6_tproxy
 
+	get_wan_ipv4
+	get_wan_ipv6
 	config_get redirect_port "$tp_cfg" "redirect_port"
 	config_get_bool use_tproxy "$tp_cfg" "use_tproxy" "0"
 	config_get_bool redirect_udp "$tp_cfg" "redirect_udp" "0"
@@ -2947,6 +3214,16 @@ setup_transparent_proxy() {
 	config_get proxy_mode "$tp_cfg" "proxy_mode"
 	config_get direct_list_dns "$tp_cfg" "direct_list_dns"
 	config_get proxy_list_dns "$tp_cfg" "proxy_list_dns"
+
+	if [ "$TRANSPARENT_PROXY_IPV6" = "1" ] ; then
+		if [ -n "$lan_ifaces" ] ; then
+			local lif
+			for lif in $lan_ifaces ; do
+				get_lan_prefix6 "$lan_ifaces"
+			done
+		fi
+	fi
+
 	config_get EXCLUDED_TCP_PORT "$tp_cfg" "excluded_tcp_port"
 	config_get EXCLUDED_UDP_PORT "$tp_cfg" "excluded_udp_port"
 
@@ -3098,6 +3375,7 @@ setup_transparent_proxy() {
 			local dir="$(dirname "$FILE_V2RAY_DNSMASQ")"
 			test -d "$dir" || mkdir -p "$dir"
 			cat "$FILE_V2RAY_DNSMASQ_CACHE" >"$FILE_V2RAY_DNSMASQ" 2>/dev/null
+			cat "$FILE_V2RAY_DNSMASQ_CACHE" > /tmp/v2ray_dnsmasq
 			DNSMASQ_RESTART_EXPECTED=1
 	fi
 
@@ -3185,21 +3463,39 @@ start_instance() {
 		return 1
 	fi
 
+	local outbounds="$(uci get v2ray.main.outbounds)"
+	for outbound in $outbounds ; do
+		protocol="$(uci -q get v2ray.$outbound.protocol)"
+		[ "$protocol" = "hysteria2" ] && {
+			HY2_ENABLED=1
+			uci set v2ray.$section.hy2_enabled=$HY2_ENABLED
+			uci commit
+			break
+		}
+	done
 	if [ -z "$v2ray_file" ] || [ ! -s "$v2ray_file" ] ; then
 		_err "Invalid V2Ray file."
 		return 1
+	else
+		test -x "$v2ray_file" || chmod 755 "$v2ray_file"
 	fi
-
-	test -x "$v2ray_file" || chmod 755 "$v2ray_file"
+	[ "$HY2_ENABLED" = "1" ] && {
+		if [ -z "$hy2_file" ] || [ ! -s "$hy2_file" ] ; then
+			_err "Hysteria2 outbounds exist but no binary specified."
+		else
+			test -x "$hy2_file" || chmod 755 "$hy2_file"
+		fi
+	}
 
 	ver_info="$(sh -c "$v2ray_file --version 2>/dev/null | head -n1")"
+
 	if [ -z "$ver_info" ] ; then
 		ver_info="$(sh -c "$v2ray_file version 2>/dev/null | head -n1")"
 	fi
+
 	CORE="$(echo $ver_info | awk -F' ' '{printf $1}')"
 	CORE_VER="$(echo $ver_info | awk -F' ' '{printf $2}')"
 	uci set v2ray.main.core=$CORE
-	uci commit
 
 	if [ "x$enabled" != "x1" ] ; then
 		_info "Service disabled: $section"
@@ -3246,8 +3542,9 @@ start_instance() {
 
 		json_add_object "log"
 
-		test -n "$access_log" && \
+		if [ -n "$access_log" ] ; then
 			json_add_string "access" "$access_log"
+		fi
 
 		if [ -n "$loglevel" ] && [ "$loglevel" != "none" ] ; then
 			json_add_string "loglevel" "$loglevel"
@@ -3279,19 +3576,15 @@ start_instance() {
 		add_routing_settings "$section"
 		add_policy_settings "$section"
 		add_reverse_settings "$section"
-
 		if [ "x$transport_enabled" = "x1" ] ; then
 			add_transport_settings
 		fi
-
 		if [ -n "$inbounds" ] ; then
 			json_add_array "inbounds"
-
 			local is
 			for is in $inbounds ; do
 				add_inbound_setting "$is"
 			done
-
 			json_close_array # inbounds
 		fi
 
@@ -3320,6 +3613,7 @@ start_instance() {
 	TRANSPARENT_PROXY_EXPECTED=1
 
 	procd_open_instance "$NAME.$section"
+	procd_set_param user luci_app_v2ray
 	procd_set_param command "$v2ray_file"
 	if [ "$CORE" = "V2Ray" ] && [ "$(expr $CORE_VER \< "5")" = "1" ] ; then
 		procd_append_param command "-c=$temp_config"
@@ -3351,6 +3645,22 @@ start_instance() {
 	procd_set_param stdout 1
 	procd_set_param pidfile "/var/run/${NAME}.${section}.pid"
 	procd_close_instance
+	[ "$HY2_ENABLED" -eq "1" ] && {
+		procd_open_instance "hy2.${section}"
+		procd_set_param user luci_app_v2ray
+		procd_set_param command "$hy2_file"
+		procd_append_param command "-c=$HY2_TOML"
+		procd_append_param command "client"
+		procd_set_param respawn
+		procd_set_param env HYSTERIA_LOG_LEVEL="$loglevel"
+		procd_set_param limits nofile="102400 102400"
+		procd_set_param limits core="0 0"
+		procd_set_param file $HY2_TOML
+		procd_set_param stderr 1
+		procd_set_param steout 1
+		procd_set_param pidfile "/var/run/hy2.${section}.pid"
+		procd_close_instance
+	}
 }
 
 start_service() {
@@ -3382,7 +3692,6 @@ stop_service() {
 		# skip when restarting, start_service will do this
 		return 0
 	fi
-
 	clear_transparent_proxy
 	gracefully_restart_dnsmasq
 

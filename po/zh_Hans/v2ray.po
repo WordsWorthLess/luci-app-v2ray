@@ -1514,3 +1514,6 @@ msgstr "域名匹配规则"
 
 msgid "Invalid Input"
 msgstr "无效输入"
+
+msgsid "mapping objects"
+msgstr "映射对象"

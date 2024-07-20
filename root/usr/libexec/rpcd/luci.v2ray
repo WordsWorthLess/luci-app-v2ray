@@ -32,16 +32,24 @@ check_running_status() {
 
 get_v2ray_version() {
 	local file="$(uci -q get v2ray.main.v2ray_file)"
+	local hy2_file="$(uci -q get v2ray.main.hy2_file)"
 	local core
 	local ver
+	local hy2_version
 	if [ ! -s "$file" ] ; then
 		echo '{ "code": 1 }'
 		return
 	fi
-
+	if [ ! -s "$hy2_file" ]  ; then
+		hy2_version="binary is not specified"
+	else
+		test -x "$hy2_file" || chmod +x "$file"
+		hy2_version="$(sh -c "$hy2_file version 2>/dev/null|grep Version")"
+	fi
 	test -x "$file" || chmod +x "$file"
 
 	local version="$(sh -c "$file --version 2>/dev/null | head -n1")"
+	local
 
 	if [ -n "$version" ] ; then
 		core=$(echo $version | awk -F' ' '{printf $1}')
@@ -54,7 +62,8 @@ get_v2ray_version() {
 		else
 			uci set v2ray.main.reality=0
 		fi
-		printf '{ "code": 0, "version": "  Core:%s   Version:%s" }\n' "$core" "$ver"
+		uci commit
+		printf '{ "code": 0, "version": "%s   Version:%s | Hysteria2   %s" }\n' "$core" "$ver" "$hy2_version"
 	else
 		version="$(sh -c "$file version 2>/dev/null | head -n1")"
 		if [ -z "$version" ] ; then
@@ -70,7 +79,8 @@ get_v2ray_version() {
 				uci set v2ray.main.core=$core
 				uci set v2ray.main.version=$ver
 				uci set v2ray.main.reality=0
-				printf '{ "code": 0, "version": "  Core:%s   Version:%s" }\n' "$core" "$ver"
+				uci commit
+				printf '{ "code": 0, "version": "V2Ray Core:%s   Version:%s<br>Hysteria2 Version:%s"}\n' "$core" "$ver" "$hy2_version"
 			fi
 		fi
 	fi
@@ -123,7 +133,7 @@ case "$1" in
 	call)
 		case "$2" in
 			runningStatus)
-				check_running_status
+				check_running_status 
 			;;
 			v2rayVersion)
 				get_v2ray_version
