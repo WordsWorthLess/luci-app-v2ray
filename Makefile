@@ -17,8 +17,8 @@ LUCI_DEPENDS:=+jshn +ip +nftables-json +kmod-nft-socket +kmod-nft-tproxy \
 	+resolveip +dnsmasq-full +curl +coreutils-base64
 LUCI_PKGARCH:=all
 
-define Package/
-USERID:luci_app_v2ray:luci_app_v2ray
+define Package/$(PKG_NAME)/Default
+  USERID:=luci_app_v2ray=0:luci_app_v2ray=51082
 endef
 
 define Package/$(PKG_NAME)/conffiles
