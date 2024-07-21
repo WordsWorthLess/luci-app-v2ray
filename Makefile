@@ -14,11 +14,11 @@ PKG_MAINTAINER:=Xingwang Liao <kuoruan@gmail.com>
 
 LUCI_TITLE:=LuCI support for V2Ray & Xray
 LUCI_DEPENDS:=+jshn +ip +nftables-json +kmod-nft-socket +kmod-nft-tproxy \
-	+resolveip +dnsmasq-full +curl +coreutils-base64
+	+resolveip +dnsmasq-full(>=2.87) +curl +coreutils-base64 +procd-ujail
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/Default
-  USERID:=luci_app_v2ray=0:luci_app_v2ray=51082
+  USERID:=luci_app_v2ray=7749:luci_app_v2ray=7749
 endef
 
 define Package/$(PKG_NAME)/conffiles
