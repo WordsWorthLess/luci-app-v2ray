@@ -176,7 +176,7 @@ jobs:
 
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        sed -i '/MAINTAINER:=$(LUCI_MAINTAINER)/a\  USERID:=luci_app_v2ray=0:luci_app_v2ray=7749' ./feeds/luci/luci.mk
+       #sed -i '/MAINTAINER:=$(LUCI_MAINTAINER)/a\  USERID:=luci_app_v2ray=0:luci_app_v2ray=7749' ./feeds/luci/luci.mk
 
         cd -
 
