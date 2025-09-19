@@ -124,12 +124,12 @@ return L.view.extend<[SectionItem[], SectionItem[], string]>({
     }
   },
   load: function () {
-    return Promise.all([v2ray.getDokodemoDoorPorts(), v2ray.getCore()]);
+    return Promise.all([v2ray.getDokodemoDoorPorts()]);
   },
-  render: function ([dokodemoDoorPorts = [], core = ""] = []) {
+  render: function (dokodemoDoorPorts = []) {
     const m = new form.Map(
       "v2ray",
-      "%s - %s".format(core, _("Transparent Proxy"))
+      "%s - %s".format("V2Ray", _("Transparent Proxy"))
     );
 
     const s = m.section(
@@ -151,6 +151,19 @@ return L.view.extend<[SectionItem[], SectionItem[], string]>({
       o.value(p.value, p.caption);
     }
     o.datatype = "port";
+
+    o = s.option(
+      form.Value,
+      "redirect_port",
+      _("MAC-Based Diversion Port"),
+      _("Transparent Proxy Port for MAC-Based Diversion")
+    );
+    o.value("", _("None"));
+    for (const p of dokodemoDoorPorts) {
+      o.value(p.value, p.caption);
+    }
+    o.datatype = "port";
+    o.rmempty = true;
 
     o = s.option(
       widgets.NetworkSelect,
