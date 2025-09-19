@@ -197,14 +197,14 @@ return L.view.extend<[SectionItem[], SectionItem[], string]>({
       form.Flag,
       "redirect_udp",
       _("Redirect UDP"),
-      "%s %s.".format(_("Redirect UDP traffic to"), core)
+      "%s %s.".format(_("Redirect UDP traffic to"), "V2Ray")
     );
 
     o = s.option(
       form.Flag,
       "redirect_dns",
       _("Redirect DNS"),
-      "%s %s.".format(_("Redirect DNS queries to"), core)
+      "%s %s.".format(_("Redirect DNS queries to"), "V2Ray")
     );
     o.depends("redirect_udp", "");
     o.depends("redirect_udp", "0");
@@ -238,7 +238,7 @@ return L.view.extend<[SectionItem[], SectionItem[], string]>({
       _("Proxy mode"),
       "%s %s.".format(
         _("Apply firewall rules to Pre-filter traffic before sending to"),
-        core
+        "V2Ray"
       )
     );
     o.value("default", _("Global Mode"));
